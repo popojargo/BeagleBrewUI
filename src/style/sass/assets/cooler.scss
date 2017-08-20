@@ -1,0 +1,30 @@
+// main: assets.scss
+
+&.cooler {
+    .cooler-icon {
+        animation: 1s ease-in-out 0s infinite alternate backwards paused opacity;
+    }
+
+    &.status-1,
+    &.status-2 {
+        .cooler-icon {
+            polyline {
+                stroke: $color-active-cooler;
+            }
+        }
+    }
+
+    &.status-1,
+    &.status-3 {
+        .tube-b {
+            stroke: $color-active-2;
+            stroke-width: $stroke-width-active;
+        }
+    }
+
+    &.status-1 {
+        .cooler-icon {
+            animation-play-state: running;
+        }
+    }
+}

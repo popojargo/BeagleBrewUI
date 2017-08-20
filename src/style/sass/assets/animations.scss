@@ -1,0 +1,31 @@
+// main: assets.scss
+
+@keyframes rotate {
+    0% {
+        transform: rotateZ(0deg);
+    }
+
+    100% {
+        transform: rotateZ(1turn);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        stroke-opacity: 1;
+    }
+
+    100% {
+        stroke-opacity: 0.6;
+    }
+}
+
+@keyframes translateX {
+    0% {
+        transform: translateX(0%)
+    }
+
+    100% {
+        transform: translateX(10%)
+    }
+}

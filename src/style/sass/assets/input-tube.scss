@@ -1,0 +1,13 @@
+// main: assets.scss
+
+&.input-tube {
+    .arrow {
+        animation: 1s ease-in-out 0s infinite alternate forwards paused translateX;
+    }
+
+    &.status-1 {
+        .arrow {
+            animation-play-state: running;
+        }
+    }
+}

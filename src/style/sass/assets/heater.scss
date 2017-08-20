@@ -1,0 +1,18 @@
+// main: assets.scss
+
+&.heater {
+    .heater-vapor {
+        animation: 1s ease-in-out 0s infinite alternate backwards paused opacity;
+    }
+
+    &.status-1 {
+        .heater-vapor:nth-of-type(2) {
+            animation-delay: 500ms;
+        }
+
+        .heater-vapor {
+            stroke: $color-active-heater;
+            animation-play-state: running;
+        }
+    }
+}

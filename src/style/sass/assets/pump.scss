@@ -1,0 +1,15 @@
+// main: assets.scss
+
+&.pump {
+    .pump-icon {
+        fill: $color-basic;
+        transform-origin: 50%;
+        animation: 2s linear 0s infinite normal forwards paused rotate;
+    }
+
+    &.status-1 {
+        .pump-icon {
+            animation-play-state: running;
+        }
+    }
+}

@@ -1,0 +1,14 @@
+// main: assets.scss
+
+&.valve {
+    .valve-icon {
+        transition: transform 1s;
+        transform: rotateZ(0deg);
+        transform-origin: 50%;
+    }
+
+    &.status-1,
+    &.status-2 {
+        transform: rotateZ(90deg);
+    }
+}

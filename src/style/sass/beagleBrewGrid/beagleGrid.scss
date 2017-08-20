@@ -1,0 +1,24 @@
+// main: ../style.scss
+
+div.beagleBrewGrid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(1);
+    transition: transform 500ms;
+    background: #22313F;
+
+    &.zoom {
+        transform: scale(2);
+    }
+
+    div.beagleBrewGrid-row {
+        display: flex;
+        div.beagleBrewGrid-square {
+            // width: calc(100vh/14);
+            // height: calc(100vh/14);
+            width: 50px;
+            height: 50px;
+        }
+    }
+}

@@ -1,0 +1,85 @@
+// main: ../style.scss
+
+@import "colors";
+@import "animations";
+@import "variables";
+
+@mixin default-tube {
+    fill: none;
+    stroke: $color-basic;
+    stroke-width: $stroke-width-default;
+    stroke-linejoin: round;
+    transition: stroke 1s, stroke-width 1s;
+}
+
+@mixin active-tube {
+    stroke: $color-active-1;
+    stroke-width: $stroke-width-active;
+}
+
+.brew-asset {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    svg {
+        position: absolute;
+    }
+
+    line,
+    polyline,
+    &.input-tube path,
+    &.heater rect,
+    &.heater path,
+    &.cooler rect,
+    &.pump circle,
+    &.valve circle,
+    &.valve path,
+    &.shower path {
+        @include default-tube;
+    }
+
+    &.status-1 .tube,
+    &.intersection-tube.status-1 line,
+    &.intersection-tube.status-2 .tube-b,
+    &.intersection-tube.status-3 .tube-a,
+    &.cooler.status-1 .tube-a,
+    &.cooler.status-2 .tube-a,
+    &.pump.status-1 .tube,
+    &.pump.status-2 .tube,
+    &.valve.status-1 .tube,
+    &.valve.status-3 .tube-a {
+        @include active-tube;
+    }
+
+    &.coil .tube,
+    &.heater path,
+    .arrow line {
+        stroke-linecap: round;
+    }
+
+    &.r90 {
+        transform: rotate(90deg);
+    }
+
+    &.r180 {
+        transform: rotate(180deg);
+    }
+
+    &.r270 {
+        transform: rotate(270deg);
+    }
+
+    @import "default-tube";
+    @import "curved-tube";
+    @import "t-connector-tube";
+    @import "intersection-tube";
+    @import "input-tube";
+    @import "output-tube";
+    @import "coil";
+    @import "heater";
+    @import "cooler";
+    @import "pump";
+    @import "valve";
+    @import "shower";
+}
