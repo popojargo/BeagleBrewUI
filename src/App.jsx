@@ -14,57 +14,38 @@ import {
     BrewAssetValve,
     BrewAssetShower
 } from './BrewGridAssets';
-
-var tanksLayout = "5:3:[params],5:9:[params],5:15:[params]";
-var tubesLayout = "1:1,13:1,13:9,14:9;2:1,2:7,5:7,5:8;5:2,3:2,3:19,11:19,11:6,5:6;9:6,9:8;3:9,6:9,6:11,4:11,4:13,9:13,9:14;5:19,5:16,6:16;9:2,12:2,12:7,14:7";
-var miscsLayout = "in(1:1);valv(2:2);valv(3:8);valv(3:10);valv(5:18);coil(6:10);show(6:16);valv(8:6);valv(8:13);heat(9:3);heat(9:5);pump(9:8);heat(9:9);heat(9:11);pump(9:14);valv(10:6);cool(13:7);out(14:7);out(14:9)";
+var brewAssets = require('./exampleDB/brewAssets.json');
 
 class App extends Component {
     render() {
-        var regExpText = /[a-z]+/ig;
-        var regExpDigit = /\d+/g;
-
-        var digits = tubesLayout.match(regExpDigit);
-        var row = getArrayElements(digits, false);
-        var col = getArrayElements(digits, true);
-        var nbRow = row.slice(0).sort(sortNumbers).reverse()[0];
-        var nbCol = col.slice(0).sort(sortNumbers).reverse()[0];
-
         var grid = [];
-        for (var i = 0; i < nbRow; i++) {
+        for (var i = 0; i < 14; i++) {
             var gridRow = [];
-            for (var j = 0; j < nbCol; j++) {
+            for (var j = 0; j < 19; j++) {
                 gridRow.push(null);
             }
             grid.push(gridRow);
         }
 
-        var tubes = tubesLayout.split(";");
+        var tanks = filterAsset("tank");
+        // for (i = 0; i < tanks.length; i++) {
+        //
+        // }
+
+        var tubes = filterAsset("tube");
         for (i = 0; i < tubes.length; i++) {
-            var td = tubes[i].match(regExpDigit);
-            var tdata = {};
-            tdata.row = getArrayElements(td, false);
-            tdata.col = getArrayElements(td, true);
-
-            placeTube(tdata);
+            placeTube(tubes[i].path);
         }
 
-        var miscs = miscsLayout.split(";");
+        var miscs = filterAsset("misc");
         for (i = 0; i < miscs.length; i++) {
-            var miscData = {};
-            var pos = miscs[i].match(regExpDigit);
-            miscData.y = parseInt(pos[0], 10) - 1;
-            miscData.x = parseInt(pos[1], 10) - 1;
-            miscData.asset = miscs[i].match(regExpText)[0];
-            addMiscAsset(miscData);
+            addMiscAsset(miscs[i]);
         }
 
-        console.log(grid);
-
-        function placeTube(tubeData) {
-            for (var i = 1; i < tubeData.row.length; i++) {
-                var yDelta = tubeData.row[i] - tubeData.row[i-1];
-                var xDelta = tubeData.col[i] - tubeData.col[i-1];
+        function placeTube(tubePath) {
+            for (var i = 1; i < tubePath.length; i++) {
+                var yDelta = tubePath[i].y - tubePath[i-1].y;
+                var xDelta = tubePath[i].x - tubePath[i-1].x;
 
                 var yLength = Math.abs(yDelta);
                 var xLength = Math.abs(xDelta);
@@ -81,15 +62,15 @@ class App extends Component {
 
                 for (var j = 0; j <= max; j++) {
                     var pos = isVertical ? yDelta : xDelta;
-                    var oldPos = isVertical ? tubeData.row[i-1] : tubeData.col[i-1];
+                    var oldPos = isVertical ? tubePath[i-1].y : tubePath[i-1].x;
                     var posDir = pos / Math.abs(pos);
                     pos = oldPos + j * posDir;
                     var posTubing = (j === 0 || j === max) ? 1 : 0;
                     posTubing *= j === 0 ? -1 : 1;
                     if(isVertical) {
-                        addTubePiece(pos, tubeData.col[i], posDir, isVertical, posTubing);
+                        addTubePiece(pos, tubePath[i].x, posDir, isVertical, posTubing);
                     } else {
-                        addTubePiece(tubeData.row[i], pos, posDir, isVertical, posTubing);
+                        addTubePiece(tubePath[i].y, pos, posDir, isVertical, posTubing);
                     }
                 }
             }
@@ -153,17 +134,15 @@ class App extends Component {
             grid[row][col] = data;
         }
 
-        function addMiscAsset(assetData) {
-            var y = assetData.y;
-            var x = assetData.x;
-            console.log(y + ":" + x);
+        function addMiscAsset(misc) {
+            var x = misc.x - 1;
+            var y = misc.y - 1;
             if(grid[y][x] === null) {
-                // console.log(y + ":" + x);
                 var data = {};
                 data.rotation = 0;
                 grid[y][x] = data;
             }
-            grid[y][x].asset = assetData.asset;
+            grid[y][x].asset = misc.miscId;
         }
 
         function sortNumbers(a, b) {
@@ -177,6 +156,10 @@ class App extends Component {
                 a.push(parseInt(arr[i], 10));
             }
             return a;
+        }
+
+        function filterAsset(type) {
+            return brewAssets.filter(obj => obj.type === type);
         }
 
         return (

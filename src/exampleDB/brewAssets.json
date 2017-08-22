@@ -1,0 +1,453 @@
+[
+    {
+        "type": "tank",
+        "name": "Cuve d'ébullition",
+        "x": 3,
+        "y": 5,
+        "width": 3,
+        "height": 5,
+        "inputs": [
+            {
+                "x": 2,
+                "y": 5
+            },
+            {
+                "x": 5,
+                "y": 6
+            }
+        ],
+        "outputs": [
+            {
+                "x": 2,
+                "y": 9
+            }
+        ],
+        "properties": {
+            "température": 0,
+            "niveau": 0,
+            "densité": 0
+        }
+    },
+    {
+        "type": "tank",
+        "name": "Cuve d'eau chaude",
+        "x": 9,
+        "y": 5,
+        "width": 3,
+        "height": 5,
+        "inputs": [
+            {
+                "x": 8,
+                "y": 5
+            }
+        ],
+        "outputs": [
+            {
+                "x": 8,
+                "y": 9
+            }
+        ],
+        "properties": {
+            "température": 0,
+            "niveau": 0
+        }
+    },
+    {
+        "type": "tank",
+        "name": "Cuve matière",
+        "x": 15,
+        "y": 5,
+        "width": 3,
+        "height": 5,
+        "inputs": [
+            {
+                "x": 16,
+                "y": 6
+            }
+        ],
+        "outputs": [
+            {
+                "x": 14,
+                "y": 9
+            }
+        ],
+        "properties": {
+            "température": 0,
+            "niveau": 0,
+            "niveau pH": 0
+        }
+    },
+    {
+        "type": "tube",
+        "path": [
+            {
+                "x": 1,
+                "y": 1
+            },
+            {
+                "x": 1,
+                "y": 13
+            },
+            {
+                "x": 9,
+                "y": 13
+            },
+            {
+                "x": 9,
+                "y": 14
+            }
+        ]
+    },
+    {
+        "type": "tube",
+        "path": [
+            {
+                "x": 1,
+                "y": 2
+            },
+            {
+                "x": 7,
+                "y": 2
+            },
+            {
+                "x": 7,
+                "y": 5
+            },
+            {
+                "x": 8,
+                "y": 5
+            }
+        ]
+    },
+    {
+        "type": "tube",
+        "path": [
+            {
+                "x": 2,
+                "y": 5
+            },
+            {
+                "x": 2,
+                "y": 3
+            },
+            {
+                "x": 19,
+                "y": 3
+            },
+            {
+                "x": 19,
+                "y": 11
+            },
+            {
+                "x": 6,
+                "y": 11
+            },
+            {
+                "x": 6,
+                "y": 5
+            }
+        ]
+    },
+    {
+        "type": "tube",
+        "path": [
+            {
+                "x": 6,
+                "y": 9
+            },
+            {
+                "x": 8,
+                "y": 9
+            }
+        ]
+    },
+    {
+        "type": "tube",
+        "path": [
+            {
+                "x": 9,
+                "y": 3
+            },
+            {
+                "x": 9,
+                "y": 6
+            },
+            {
+                "x": 11,
+                "y": 6
+            },
+            {
+                "x": 11,
+                "y": 4
+            },
+            {
+                "x": 13,
+                "y": 4
+            },
+            {
+                "x": 13,
+                "y": 9
+            },
+            {
+                "x": 14,
+                "y": 9
+            }
+        ]
+    },
+    {
+        "type": "tube",
+        "path": [
+            {
+                "x": 19,
+                "y": 5
+            },
+            {
+                "x": 16,
+                "y": 5
+            },
+            {
+                "x": 16,
+                "y": 6
+            }
+        ]
+    },
+    {
+        "type": "tube",
+        "path": [
+            {
+                "x": 2,
+                "y": 9
+            },
+            {
+                "x": 2,
+                "y": 12
+            },
+            {
+                "x": 7,
+                "y": 12
+            },
+            {
+                "x": 7,
+                "y": 14
+            }
+        ]
+    },
+    {
+        "type": "misc",
+        "miscId": "in",
+        "name": "",
+        "clickable": false,
+        "prop": {
+            "active": true
+        },
+        "x": 1,
+        "y": 1
+    },
+    {
+        "type": "misc",
+        "miscId": "valv",
+        "name": "Valve entrée cuve d'eau chaude",
+        "clickable": true,
+        "prop" : {
+            "active": false
+        },
+        "x": 2,
+        "y": 2
+    },
+    {
+        "type": "misc",
+        "miscId": "valv",
+        "name": "Valve entrée cuve d'ébuillition",
+        "clickable": true,
+        "prop" : {
+            "active": false
+        },
+        "x": 8,
+        "y": 3
+    },
+    {
+        "type": "misc",
+        "miscId": "valv",
+        "name": "Valve entrée cuve d'eau chaude",
+        "clickable": true,
+        "prop" : {
+            "active": false
+        },
+        "x": 10,
+        "y": 3
+    },
+    {
+        "type": "misc",
+        "miscId": "valv",
+        "name": "Valve entrée cuve d'eau chaude",
+        "clickable": true,
+        "prop" : {
+            "active": false
+        },
+        "x": 18,
+        "y": 5
+    },
+    {
+        "type": "misc",
+        "miscId": "coil",
+        "name": "",
+        "clickable": false,
+        "prop" : {},
+        "x": 10,
+        "y": 6
+    },
+    {
+        "type": "misc",
+        "miscId": "show",
+        "name": "",
+        "clickable": false,
+        "prop" : {},
+        "x": 16,
+        "y": 6
+    },
+    {
+        "type": "misc",
+        "miscId": "valv",
+        "name": "Valve entrée cuve d'eau chaude",
+        "clickable": true,
+        "prop" : {
+            "active": false
+        },
+        "x": 6,
+        "y": 8
+    },
+    {
+        "type": "misc",
+        "miscId": "valv",
+        "name": "Valve entrée cuve d'eau chaude",
+        "clickable": true,
+        "prop" : {
+            "active": false
+        },
+        "x": 13,
+        "y": 8
+    },
+    {
+        "type": "misc",
+        "miscId": "heat",
+        "name": "",
+        "clickable": false,
+        "prop" : {
+            "active": false
+        },
+        "x": 3,
+        "y": 9
+    },
+    {
+        "type": "misc",
+        "miscId": "heat",
+        "name": "",
+        "clickable": false,
+        "prop" : {
+            "active": false
+        },
+        "x": 5,
+        "y": 9
+    },
+    {
+        "type": "misc",
+        "miscId": "pump",
+        "name": "Pompe de sortie cuve d'eau chaude",
+        "clickable": true,
+        "prop" : {
+            "active": false
+        },
+        "x": 8,
+        "y": 9
+    },
+    {
+        "type": "misc",
+        "miscId": "heat",
+        "name": "",
+        "clickable": false,
+        "prop" : {
+            "active": false
+        },
+        "x": 9,
+        "y": 9
+    },
+    {
+        "type": "misc",
+        "miscId": "heat",
+        "name": "",
+        "clickable": false,
+        "prop" : {
+            "active": false
+        },
+        "x": 11,
+        "y": 9
+    },
+    {
+        "type": "misc",
+        "miscId": "pump",
+        "name": "Pompe de sortie cuve matière",
+        "clickable": true,
+        "prop" : {
+            "active": false
+        },
+        "x": 14,
+        "y": 9
+    },
+    {
+        "type": "misc",
+        "miscId": "valv",
+        "name": "Valve entrée cuve d'eau chaude",
+        "clickable": true,
+        "prop" : {
+            "active": false
+        },
+        "x": 6,
+        "y": 10
+    },
+    {
+        "type": "misc",
+        "miscId": "heat",
+        "name": "",
+        "clickable": false,
+        "prop" : {
+            "active": false
+        },
+        "x": 3,
+        "y": 9
+    },
+    {
+        "type": "misc",
+        "miscId": "cool",
+        "name": "",
+        "clickable": false,
+        "prop" : {
+            "active": false,
+            "hasCoolant": false,
+            "hasFluid": false
+        },
+        "x": 7,
+        "y": 13
+    },
+    {
+        "type": "misc",
+        "miscId": "out",
+        "name": "",
+        "clickable": false,
+        "prop": {
+            "active": true
+        },
+        "x": 7,
+        "y": 14
+    },
+    {
+        "type": "misc",
+        "miscId": "out",
+        "name": "",
+        "clickable": false,
+        "prop": {
+            "active": true
+        },
+        "x": 9,
+        "y": 14
+    }
+]

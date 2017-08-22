@@ -1,17 +1,37 @@
 import React, {Component} from 'react';
 
 class BrewAsset extends Component {
-    constructor() {
-        super();
-        this.state = {
-            rotation: 0
-        }
+    setClass(assetClassName) {
+        var baseClass = "brew-asset";
+        return baseClass + " " + assetClassName;
+    }
+    setClassWithRotation(assetClassName) {
+        return this.setClass(assetClassName) + " r" + this.props.rotation;
+    }
+}
+
+class BrewAssetClickable extends BrewAsset {
+    behaviour() {
+        alert("test");
+    }
+}
+
+class BrewAssetTank extends BrewAssetClickable {
+    render() {
+        var assetClassName = "tank";
+        var assetClass = super.setClass(assetClassName);
+        return (
+            <div className={assetClass}>
+                <span className="fluid"></span>
+            </div>
+        );
     }
 }
 
 class BrewAssetDefaultTube extends BrewAsset {
     render() {
-        var assetClass = "brew-asset default-tube r" + this.props.rotation;
+        var assetClassName = "default-tube";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
             <div className={assetClass}>
                 <svg viewBox="0 0 50 50">
@@ -24,7 +44,8 @@ class BrewAssetDefaultTube extends BrewAsset {
 
 class BrewAssetCurvedTube extends BrewAsset {
     render() {
-        var assetClass = "brew-asset curved-tube r" + this.props.rotation;
+        var assetClassName = "curved-tube";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
             <div className={assetClass}>
                 <svg viewBox="0 0 50 50">
@@ -37,7 +58,8 @@ class BrewAssetCurvedTube extends BrewAsset {
 
 class BrewAssetTConnectorTube extends BrewAsset {
     render() {
-        var assetClass = "brew-asset t-connector-tube r" + this.props.rotation;
+        var assetClassName = "t-connector-tube";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
             <div className={assetClass}>
                 <svg viewBox="0 0 50 50">
@@ -51,7 +73,8 @@ class BrewAssetTConnectorTube extends BrewAsset {
 
 class BrewAssetIntersectionTube extends BrewAsset {
     render() {
-        var assetClass = "brew-asset intersection-tube r" + this.props.rotation;
+        var assetClassName = "intersection-tube";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
             <div className={assetClass}>
                 <svg viewBox="0 0 50 50">
@@ -68,7 +91,8 @@ class BrewAssetIntersectionTube extends BrewAsset {
 
 class BrewAssetInputTube extends BrewAsset {
     render() {
-        var assetClass = "brew-asset input-tube r" + this.props.rotation;
+        var assetClassName = "input-tube";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
             <div className={assetClass}>
                 <svg viewBox="0 0 50 50">
@@ -90,7 +114,8 @@ class BrewAssetInputTube extends BrewAsset {
 
 class BrewAssetOutputTube extends BrewAsset {
     render() {
-        var assetClass = "brew-asset output-tube r" + this.props.rotation;
+        var assetClassName = "output-tube";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
             <div className={assetClass}>
                 <svg viewBox="0 0 50 50">
@@ -112,7 +137,8 @@ class BrewAssetOutputTube extends BrewAsset {
 
 class BrewAssetCoil extends BrewAsset {
     render() {
-        var assetClass = "brew-asset coil r" + this.props.rotation;
+        var assetClassName = "coil";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
             <div className={assetClass}>
                 <svg viewBox="0 0 50 50">
@@ -130,7 +156,8 @@ class BrewAssetCoil extends BrewAsset {
 
 class BrewAssetHeater extends BrewAsset {
     render() {
-        var assetClass = "brew-asset heater r" + this.props.rotation;
+        var assetClassName = "heater";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
             <div className={assetClass}>
                 <svg viewBox="0 0 50 50">
@@ -148,7 +175,8 @@ class BrewAssetHeater extends BrewAsset {
 
 class BrewAssetCooler extends BrewAsset {
     render() {
-        var assetClass = "brew-asset cooler r" + this.props.rotation;
+        var assetClassName = "cooler";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
             <div className={assetClass}>
                 <svg viewBox="0 0 50 50">
@@ -174,11 +202,12 @@ class BrewAssetCooler extends BrewAsset {
     }
 }
 
-class BrewAssetPump extends BrewAsset {
+class BrewAssetPump extends BrewAssetClickable {
     render() {
-        var assetClass = "brew-asset pump r" + this.props.rotation;
+        var assetClassName = "pump";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
-            <div className={assetClass}>
+            <div className={assetClass} onClick={super.behaviour}>
                 <svg viewBox="0 0 50 50">
                     <g>
                         <line className="tube" y1="25" x2="10" y2="25"/>
@@ -193,11 +222,12 @@ class BrewAssetPump extends BrewAsset {
     }
 }
 
-class BrewAssetValve extends BrewAsset {
+class BrewAssetValve extends BrewAssetClickable {
     render() {
-        var assetClass = "brew-asset valve r" + this.props.rotation;
+        var assetClassName = "valve";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
-            <div className={assetClass}>
+            <div className={assetClass} onClick={super.behaviour}>
                 <svg viewBox="0 0 50 50" className="valve-icon">
                     <line className="tube-c tube" x1="25" y1="10" x2="25" y2="40"/>
                     <g>
@@ -217,7 +247,8 @@ class BrewAssetValve extends BrewAsset {
 
 class BrewAssetShower extends BrewAsset {
     render() {
-        var assetClass = "brew-asset shower r" + this.props.rotation;
+        var assetClassName = "shower";
+        var assetClass = super.setClassWithRotation(assetClassName);
         return (
             <div className={assetClass}>
                 <svg viewBox="0 0 50 50">
