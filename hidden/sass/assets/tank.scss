@@ -1,0 +1,13 @@
+// main: assets.scss
+
+&.tank {
+    position: absolute;
+    width: auto;
+    height: auto;
+}
+
+.tank {
+    border: $border-width-tank solid $color-basic;
+    position: absolute;
+    background: transparent;
+}

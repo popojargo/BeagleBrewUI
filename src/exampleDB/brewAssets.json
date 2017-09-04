@@ -1,7 +1,6 @@
 [
     {
         "type": "tank",
-        "name": "Cuve d'ébullition",
         "x": 3,
         "y": 5,
         "width": 3,
@@ -12,8 +11,8 @@
                 "y": 5
             },
             {
-                "x": 5,
-                "y": 6
+                "x": 6,
+                "y": 5
             }
         ],
         "outputs": [
@@ -22,15 +21,16 @@
                 "y": 9
             }
         ],
-        "properties": {
-            "température": 0,
+        "prop": {
+            "name": "Cuve d'ébullition",
+            "température": 25,
+            "capacité": 0,
             "niveau": 0,
             "densité": 0
         }
     },
     {
         "type": "tank",
-        "name": "Cuve d'eau chaude",
         "x": 9,
         "y": 5,
         "width": 3,
@@ -47,14 +47,15 @@
                 "y": 9
             }
         ],
-        "properties": {
+        "prop": {
+            "name": "Cuve d'eau chaude",
             "température": 0,
+            "capacité": 0,
             "niveau": 0
         }
     },
     {
         "type": "tank",
-        "name": "Cuve matière",
         "x": 15,
         "y": 5,
         "width": 3,
@@ -71,10 +72,12 @@
                 "y": 9
             }
         ],
-        "properties": {
+        "prop": {
+            "name": "Cuve matière",
             "température": 0,
+            "capacité": 0,
             "niveau": 0,
-            "niveau pH": 0
+            "acidité": 0
         }
     },
     {
@@ -234,10 +237,9 @@
     },
     {
         "type": "misc",
-        "miscId": "in",
-        "name": "",
-        "clickable": false,
+        "assetId": "in",
         "prop": {
+            "name": "",
             "active": true
         },
         "x": 1,
@@ -245,10 +247,9 @@
     },
     {
         "type": "misc",
-        "miscId": "valv",
-        "name": "Valve entrée cuve d'eau chaude",
-        "clickable": true,
+        "assetId": "valv",
         "prop" : {
+            "name": "Valve entrée cuve d'eau chaude",
             "active": false
         },
         "x": 2,
@@ -256,10 +257,9 @@
     },
     {
         "type": "misc",
-        "miscId": "valv",
-        "name": "Valve entrée cuve d'ébuillition",
-        "clickable": true,
+        "assetId": "valv",
         "prop" : {
+            "name": "Valve entrée cuve d'ébullition",
             "active": false
         },
         "x": 8,
@@ -267,10 +267,9 @@
     },
     {
         "type": "misc",
-        "miscId": "valv",
-        "name": "Valve entrée cuve d'eau chaude",
-        "clickable": true,
+        "assetId": "valv",
         "prop" : {
+            "name": "Valve entrée cuve d'eau chaude",
             "active": false
         },
         "x": 10,
@@ -278,10 +277,9 @@
     },
     {
         "type": "misc",
-        "miscId": "valv",
-        "name": "Valve entrée cuve d'eau chaude",
-        "clickable": true,
+        "assetId": "valv",
         "prop" : {
+            "name": "Valve entrée cuve d'eau chaude",
             "active": false
         },
         "x": 18,
@@ -289,28 +287,27 @@
     },
     {
         "type": "misc",
-        "miscId": "coil",
-        "name": "",
-        "clickable": false,
-        "prop" : {},
+        "assetId": "coil",
+        "prop" : {
+            "name": ""
+        },
         "x": 10,
         "y": 6
     },
     {
         "type": "misc",
-        "miscId": "show",
-        "name": "",
-        "clickable": false,
-        "prop" : {},
+        "assetId": "show",
+        "prop" : {
+            "name": ""
+        },
         "x": 16,
         "y": 6
     },
     {
         "type": "misc",
-        "miscId": "valv",
-        "name": "Valve entrée cuve d'eau chaude",
-        "clickable": true,
+        "assetId": "valv",
         "prop" : {
+            "name": "Valve entrée cuve d'eau chaude",
             "active": false
         },
         "x": 6,
@@ -318,10 +315,9 @@
     },
     {
         "type": "misc",
-        "miscId": "valv",
-        "name": "Valve entrée cuve d'eau chaude",
-        "clickable": true,
+        "assetId": "valv",
         "prop" : {
+            "name": "Valve entrée cuve d'eau chaude",
             "active": false
         },
         "x": 13,
@@ -329,10 +325,9 @@
     },
     {
         "type": "misc",
-        "miscId": "heat",
-        "name": "",
-        "clickable": false,
+        "assetId": "heat",
         "prop" : {
+            "name": "",
             "active": false
         },
         "x": 3,
@@ -340,10 +335,9 @@
     },
     {
         "type": "misc",
-        "miscId": "heat",
-        "name": "",
-        "clickable": false,
+        "assetId": "heat",
         "prop" : {
+            "name": "",
             "active": false
         },
         "x": 5,
@@ -351,10 +345,9 @@
     },
     {
         "type": "misc",
-        "miscId": "pump",
-        "name": "Pompe de sortie cuve d'eau chaude",
-        "clickable": true,
+        "assetId": "pump",
         "prop" : {
+            "name": "Pompe de sortie cuve d'eau chaude",
             "active": false
         },
         "x": 8,
@@ -362,10 +355,9 @@
     },
     {
         "type": "misc",
-        "miscId": "heat",
-        "name": "",
-        "clickable": false,
+        "assetId": "heat",
         "prop" : {
+            "name": "",
             "active": false
         },
         "x": 9,
@@ -373,10 +365,9 @@
     },
     {
         "type": "misc",
-        "miscId": "heat",
-        "name": "",
-        "clickable": false,
+        "assetId": "heat",
         "prop" : {
+            "name": "",
             "active": false
         },
         "x": 11,
@@ -384,10 +375,9 @@
     },
     {
         "type": "misc",
-        "miscId": "pump",
-        "name": "Pompe de sortie cuve matière",
-        "clickable": true,
+        "assetId": "pump",
         "prop" : {
+            "name": "Pompe de sortie cuve matière",
             "active": false
         },
         "x": 14,
@@ -395,21 +385,19 @@
     },
     {
         "type": "misc",
-        "miscId": "valv",
-        "name": "Valve entrée cuve d'eau chaude",
-        "clickable": true,
+        "assetId": "valv",
         "prop" : {
-            "active": false
+            "name": "Valve entrée cuve d'eau chaude",
+            "active": true
         },
         "x": 6,
         "y": 10
     },
     {
         "type": "misc",
-        "miscId": "heat",
-        "name": "",
-        "clickable": false,
+        "assetId": "heat",
         "prop" : {
+            "name": "",
             "active": false
         },
         "x": 3,
@@ -417,10 +405,9 @@
     },
     {
         "type": "misc",
-        "miscId": "cool",
-        "name": "",
-        "clickable": false,
+        "assetId": "cool",
         "prop" : {
+            "name": "",
             "active": false,
             "hasCoolant": false,
             "hasFluid": false
@@ -430,10 +417,9 @@
     },
     {
         "type": "misc",
-        "miscId": "out",
-        "name": "",
-        "clickable": false,
+        "assetId": "out",
         "prop": {
+            "name": "",
             "active": true
         },
         "x": 7,
@@ -441,10 +427,9 @@
     },
     {
         "type": "misc",
-        "miscId": "out",
-        "name": "",
-        "clickable": false,
+        "assetId": "out",
         "prop": {
+            "name": "",
             "active": true
         },
         "x": 9,

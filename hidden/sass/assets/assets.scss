@@ -70,6 +70,7 @@
         transform: rotate(270deg);
     }
 
+    @import 'tank';
     @import "default-tube";
     @import "curved-tube";
     @import "t-connector-tube";
