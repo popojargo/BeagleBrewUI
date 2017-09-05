@@ -5,14 +5,28 @@ import {
 	BrewAssetTank
 } from './BrewGridAssets';
 import BrewGridControlPanel from './BrewGridControlPanel';
-var brewAssets = require('./exampleDB/brewAssets.json');
+import BrewGridStore from './stores/BrewGridStore';
+import * as BrewGridActions from './actions/BrewGridActions';
 
 class App extends Component {
-	render() {
-		// TODO: find the highest X and Y of brewAssets to build the grid
-
+	constructor() {
+		super();
 		var tankGrid = [];
-
+		var grid = [];
+		this.updateData = this.updateData.bind(this);
+		this.state = {
+			brewAssets: BrewGridStore.getBrewAssets(),
+			tankGrid: tankGrid,
+			grid: grid
+		};
+	}
+	componentWillMount() {
+		BrewGridStore.on("change", this.updateData);
+		this.initializeGrid();
+	}
+	initializeGrid() {
+		// TODO: find the highest X and Y of brewAssets to build the grid
+		var tankGrid = [];
 		var grid = [];
 		for (var i = 0; i < 14; i++) {
 			var gridRow = [];
@@ -22,20 +36,25 @@ class App extends Component {
 			grid.push(gridRow);
 		}
 
-		const tanks = filterAsset("tank");
+		const tanks = this.filterAsset("tank");
 		for (i = 0; i < tanks.length; i++) {
 			addTank(tanks[i]);
 		}
 
-		const tubes = filterAsset("tube");
+		const tubes = this.filterAsset("tube");
 		for (i = 0; i < tubes.length; i++) {
 			placeTube(tubes[i].path);
 		}
 
-		const miscs = filterAsset("misc");
+		const miscs = this.filterAsset("misc");
 		for (i = 0; i < miscs.length; i++) {
 			addMiscAsset(miscs[i]);
 		}
+
+		this.setState({
+			grid: grid,
+			tankGrid: tankGrid
+		});
 
 		function addTank(tank) {
 			for (var i = 0; i < tank.inputs.length; i++) {
@@ -201,13 +220,21 @@ class App extends Component {
 			}
 			return a;
 		}
-
-		function filterAsset(type) {
-			return brewAssets.filter(obj => obj.type === type);
-		}
-
+	}
+	componentWillUnmount() {
+		BrewGridStore.removeListener("change", this.updateData);
+	}
+	updateData() {
+		this.setState({
+			brewAssets: BrewGridStore.getBrewAssets()
+		});
+	}
+	filterAsset(type) {
+		return this.state.brewAssets.filter(obj => obj.type === type);
+	}
+	render() {
 		return (
-			<BrewGrid grid={grid} tankGrid={tankGrid} />
+			<BrewGrid grid={this.state.grid} tankGrid={this.state.tankGrid} />
 		);
 	}
 }
@@ -220,35 +247,43 @@ class BrewGrid extends Component {
 		this.state = {
 			showCP: false,
 			winWidth: 0,
-			winHeight: 0
+			winHeight: 0,
+			zoomX: 0,
+			zoomY: 0
 		};
 	}
-	toggleCP(asset) {
+	toggleCP() {
+		var asset = BrewGridStore.getDataFlow();
 		this.setState((prevState) => ({
-			showCP: !prevState.showCP,
-			activeAsset: asset
+			showCP: !prevState.showCP
 		}));
+		if(asset !== null) {
+			this.setState({
+				zoomX: asset.x,
+				zoomY: asset.y
+			});
+		}
 	}
 	zoomTo() {
 		const grid = this.props.grid;
 		var nbRow = grid.length;
 		var nbCol = grid[0].length;
-		if(typeof activeAsset !== "undefined") {
+		var zoomX = this.state.zoomX;
+		var zoomY = this.state.zoomY;
+		var originY = 100 * (zoomY - 1 + 0.5) / nbRow;
+		var originX = 100 * (zoomX - 1 + 0.5) / nbCol;
+		var origin = originX + "% " + originY + "%";
 
-			var zoomX = this.state.activeAsset.data.x;
-			var zoomY = this.state.activeAsset.data.y;
-			var originY = 100 * (zoomY - 1 + 0.5) / nbRow;
-			var originX = 100 * (zoomX - 1 + 0.5) / nbCol;
-			var origin = originX + "% " + originY + "%";
+		var cpWidth = this.state.winWidth / 3;
+		cpWidth = cpWidth < 500 ? cpWidth : 500;
+		cpWidth = cpWidth > 300 ? cpWidth : 300;
+		var zoomingWidth = this.state.winWidth - cpWidth;
+		// (window.innerWidth - ( rect.width * scale ) ) / 2;
+		return origin;
 
-			var cpWidth = this.state.winWidth / 3;
-			cpWidth = cpWidth < 500 ? cpWidth : 500;
-			cpWidth = cpWidth > 300 ? cpWidth : 300;
-			var zoomingWidth = this.state.winWidth - cpWidth;
-			// (window.innerWidth - ( rect.width * scale ) ) / 2;
-			return origin;
-		}
-		return "";
+	}
+	componentWillMount() {
+		BrewGridStore.on("Toggle Control Panel", this.toggleCP);
 	}
 	componentDidMount() {
 	    this.updateWindowSize();
@@ -257,6 +292,7 @@ class BrewGrid extends Component {
 
 	componentWillUnmount() {
 	    window.removeEventListener('resize', this.updateWindowSize);
+		BrewGridStore.removeListener("Toggle Control Panel", this.toggleCP);
 	}
 
 	updateWindowSize() {
@@ -268,11 +304,11 @@ class BrewGrid extends Component {
 	render() {
 		const grid = this.props.grid;
 		const rows = grid.map((data, index) =>
-			<BrewGridRow rowData={data} row={index} key={index} handler={this.toggleCP} />
+			<BrewGridRow rowData={data} row={index} key={index} />
 		);
 		const tankGrid = this.props.tankGrid;
 		const tanks = tankGrid.map((data, index) =>
-			<BrewAssetTank data={data} key={index} handler={this.toggleCP} />
+			<BrewAssetTank data={data} key={index} />
 		);
 
 		var origin = this.zoomTo();
@@ -289,7 +325,7 @@ class BrewGrid extends Component {
 					</div>
 				</div>
 				<div className="beagleBrewCP">
-					<BrewGridControlPanel asset={this.state.activeAsset} />
+					<BrewGridControlPanel />
 				</div>
 			</div>
 		);
@@ -300,7 +336,7 @@ class BrewGridRow extends Component {
 	render() {
 		const rows = this.props.rowData;
 		const squares = rows.map((data, index) =>
-			<BrewAssetSquare assetData={data} key={index} handler={this.props.handler} dataFlow={this.props.dataFlow}/>
+			<BrewAssetSquare assetData={data} key={index} />
 		);
 
 		return(

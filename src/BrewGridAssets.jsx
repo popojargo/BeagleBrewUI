@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import BrewGridStore from './stores/BrewGridStore';
+import * as BrewGridActions from './actions/BrewGridActions';
 
 class BrewAssetSquare extends Component {
     render() {
@@ -46,7 +48,7 @@ class BrewAssetSquare extends Component {
                     asset = <BrewAssetShower data={assetData} />;
                     break;
                 default:
-
+                    //null
             }
         }
 
@@ -59,12 +61,28 @@ class BrewAssetSquare extends Component {
 }
 
 class BrewAsset extends Component {
-    render(assetCode, assetClass, hasRotation) {
-        const rotationClass = hasRotation ? " r" + this.props.data.rotation : "";
+    constructor(props) {
+        super(props);
+        const prop = props.data.prop;
+        const active = typeof prop !== "undefined" ? prop.active : false;
+        this.state = {
+            active: active
+        };
+    }
+    getAssetStatusClass() {
+        var status = this.state.active ? "status-1" : "";
+        return " " + status;
+    }
+    getClass(assetClass, hasRotation) {
         const baseClass = "brew-asset";
-        var elemClass = baseClass + " " + assetClass + rotationClass;
+        const rotationClass = hasRotation ? " r" + this.props.data.rotation : "";
+        var statusClass = this.getAssetStatusClass();
+        var elemClass = baseClass + " " + assetClass + rotationClass + statusClass;
+        return elemClass;
+    }
+    render(assetCode, assetClass, hasRotation) {
         return(
-            <div className={elemClass} >
+            <div className={this.getClass(assetClass, hasRotation)} >
                 {assetCode}
             </div>
         );
@@ -74,42 +92,56 @@ class BrewAsset extends Component {
 class BrewAssetClickable extends BrewAsset {
     constructor(props) {
         super(props);
-        this.toggleDataFlow = this.toggleDataFlow.bind(this);
+        this.requestDataFlow = this.requestDataFlow.bind(this);
+        this.startDataFlow = this.startDataFlow.bind(this);
+        this.stopDataFlow = this.stopDataFlow.bind(this);
+        const prop = props.data.prop;
+        const active = typeof prop !== "undefined" ? prop.active : false;
         this.state = {
-            data: props.data
+            data: props.data,
+            active: active,
+            flowingData: false
         };
     }
-    toggleDataFlow() {
-        this.props.handler(this);
+    componentDidMount() {
+        this.interval = setInterval(() => this.tick(), 1000);
+    }
+    requestDataFlow() {
+        BrewGridActions.requestDataFlow(this);
+    }
+    startDataFlow() {
+        this.setState({
+            flowingData: true
+        });
+    }
+    stopDataFlow() {
+        this.setState({
+            flowingData: false
+        });
     }
     changeData(newData) {
         this.setState((prevState) => ({
             data: Object.assign({}, prevState.data, newData)
         }));
     }
-
     tick() {
-        var testData = this.props.data;
-        testData.prop["active"] = Math.random() >= 0.5;
-        this.setState({
-            data: testData
-        });
-        if(this.state.sendingData) {
-            // console.log(testData.prop);
-            this.props.dataFlow(this.state.data);
-        }
+        // var testData = this.props.data;
+        // var active = testData.prop["active"] = Math.random() >= 0.5;
+        // this.setState({
+        //     data: testData,
+        //     active: active
+        // });
+        // if(this.state.flowingData) {
+        //     BrewGridActions.flowData(this.state.data);
+        // }
     }
-    componentDidMount() {
-        this.interval = setInterval(() => this.tick(), 1000);
+    getClass(assetClass, hasRotation) {
+        const clickableClass = "clickable";
+        return super.getClass(assetClass, hasRotation) + " " + clickableClass;
     }
-
     render(assetCode, assetClass, hasRotation) {
-        const rotationClass = hasRotation ? " r" + this.props.data.rotation : "";
-        const baseClass = "brew-asset";
-        var elemClass = baseClass + " " + assetClass + rotationClass + " clickable";
-
         return(
-            <div className={elemClass} onClick={this.toggleDataFlow}>
+            <div className={this.getClass(assetClass, hasRotation)} onClick={this.requestDataFlow}>
                 {assetCode}
             </div>
         );
@@ -124,9 +156,9 @@ class BrewAssetTank extends BrewAssetClickable {
         this.setState({
             data: testData
         });
-    }
-    componentDidMount() {
-        this.interval = setInterval(() => this.tick(), 1000);
+        if(this.state.flowingData) {
+            BrewGridActions.flowData(this.state.data);
+        }
     }
     render() {
         const assetClass = "tank";
@@ -317,12 +349,12 @@ class BrewAssetValve extends BrewAssetClickable {
         const assetCode =
             <div>
                 <svg viewBox="0 0 50 50" className="valve-icon">
-                    <line className="tube-c tube" x1="25" y1="10" x2="25" y2="40"/>
                     <g>
                         <circle cx="25" cy="25" r="15"/>
                         <path d="M31.27,21.46a5,5,0,0,1,0,7.07"/>
                         <path d="M18.73,28.54a5,5,0,0,1,0-7.07"/>
                     </g>
+                    <line className="tube-c tube" x1="25" y1="10" x2="25" y2="40"/>
                 </svg>
                 <svg viewBox="0 0 50 50">
                     <line className="tube-a tube" y1="25" x2="10" y2="25"/>
@@ -337,13 +369,13 @@ class BrewAssetShower extends BrewAsset {
     render() {
         const assetClass = "shower";
         const assetCode =
-        <svg viewBox="0 0 50 50">
-            <line className="tube" x1="25" y1="15" x2="25"/>
-            <g className="shower-icon">
-                <path d="M37.5,27.5c0,6.9-25,6.9-25,0a12.5,12.5,0,0,1,25,0Z"/>
-                <line x1="12.5" y1="27.5" x2="37.5" y2="27.5"/>
-            </g>
-        </svg>;
+            <svg viewBox="0 0 50 50">
+                <line className="tube" x1="25" y1="15" x2="25"/>
+                <g className="shower-icon">
+                    <path d="M37.5,27.5c0,6.9-25,6.9-25,0a12.5,12.5,0,0,1,25,0Z"/>
+                    <line x1="12.5" y1="27.5" x2="37.5" y2="27.5"/>
+                </g>
+            </svg>;
         return super.render(assetCode, assetClass, false);
     }
 }

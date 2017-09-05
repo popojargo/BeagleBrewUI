@@ -420,7 +420,7 @@
         "assetId": "out",
         "prop": {
             "name": "",
-            "active": true
+            "active": false
         },
         "x": 7,
         "y": 14
@@ -430,7 +430,7 @@
         "assetId": "out",
         "prop": {
             "name": "",
-            "active": true
+            "active": false
         },
         "x": 9,
         "y": 14

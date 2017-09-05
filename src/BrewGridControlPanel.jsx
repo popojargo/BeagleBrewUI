@@ -1,12 +1,36 @@
 import React, {Component} from 'react';
+import BrewGridStore from './stores/BrewGridStore';
+import * as BrewGridActions from './actions/BrewGridActions';
 const variables = require('./exampleDB/controlPanelVariables.json');
 
 class BrewGridControlPanel extends Component {
     constructor(props) {
         super(props);
+        this.back = this.back.bind(this);
+        this.confirm = this.confirm.bind(this);
+        this.confirm = this.confirm.bind(this);
+        this.updateData = this.updateData.bind(this);
         this.state = {
-            modified: false
+            modified: false,
+            asset: this.getAsset()
         };
+    }
+    getAsset() {
+        return BrewGridStore.getDataFlow();
+    }
+    componentWillMount() {
+        BrewGridStore.on("Flowing Data", this.updateData);
+    }
+    componentWillUnmount() {
+        BrewGridStore.removeListener("Flowing Data", this.updateData);
+    }
+    updateData() {
+        this.setState({
+            asset: this.getAsset()
+        })
+    }
+    back() {
+        BrewGridActions.stopDataFlow();
     }
     confirm() {
         console.log("confirm");
@@ -15,20 +39,18 @@ class BrewGridControlPanel extends Component {
         console.log("cancel");
     }
     render() {
-        var asset = this.props.asset;
+        var asset = this.state.asset;
         if(asset == null) {
-            return(
-                <div className="beagleBrewCP-container"></div>
-            );
+            return(<div className="beagleBrewCP-container"></div>);
         }
-        var assetData = asset.props.data.prop;
+        var assetData = asset.prop;
         const dataKeys = Object.keys(assetData);
         const cpContent = dataKeys.map((data, index) =>
             <Content dataName={data} data={assetData[data]} key={index} />
         );
         return(
             <div className="beagleBrewCP-container">
-                <DefaultButton classname="back" text="back" handler={asset.toggleDataFlow} />
+                <DefaultButton classname="back" text="back" handler={this.back}/>
                 <div className="beagleBrewCP-contents">
                     {cpContent}
                 </div>
@@ -57,7 +79,7 @@ class Content extends Component {
                 element = <Name name={this.props.data} />;
                 break;
             case "active":
-                element = <Switch status={this.props.data} />;
+                element = <Switch data={this.props.data} />;
                 break;
             default:
                 element = <DefaultContent dataName={dataName} data={this.props.data} />;
@@ -71,13 +93,28 @@ class Content extends Component {
     }
 }
 
-class Switch extends Component {
-    switchStuff() {
+class Input extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: props.data,
+            currentData: props.data
+        }
+    }
+}
 
+class Switch extends Input {
+    switchStuff() {
+        this.setState({
+            currentData: !this.state.currentData
+        });
     }
     render() {
+        var checked = this.state.currentData ? "checked" : "";
         return(
-            <input type="checkbox" checked={this.props.status} onChange={this.switchStuff}/>
+            <label className={"switch " + checked}>
+                <input type="checkbox" checked={this.props.status} onChange={this.switchStuff.bind(this)}/>
+            </label>
         );
     }
 }

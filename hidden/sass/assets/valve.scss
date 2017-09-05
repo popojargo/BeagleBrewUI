@@ -9,6 +9,8 @@
 
     &.status-1,
     &.status-2 {
-        transform: rotateZ(90deg);
+        .valve-icon {
+            transform: rotateZ(90deg);
+        }
     }
 }

@@ -1,6 +1,7 @@
 // main: ../style.scss
 
 @import "colors";
+@import "beagleBrewControlPanel";
 
 div.beagleBrewGrid {
     transform: scale(1);
@@ -10,6 +11,10 @@ div.beagleBrewGrid {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .clickable {
+        cursor: pointer;
+    }
 
     &>div.beagleBrewGrid-tanks {
         position: absolute;
@@ -28,10 +33,7 @@ div.beagleBrewGrid {
             :not(.clickable) {
                 pointer-events: none;
             }
-
             .clickable {
-                cursor: pointer;
-
                 &:hover::after {
                     content: '';
                     position: absolute;
@@ -51,112 +53,5 @@ div.openControlPanel {
 
     div.beagleBrewGrid {
         transform: scale(2);
-    }
-
-    div.beagleBrewCP {
-        div.beagleBrewCP-container {
-            right: 0px;
-        }
-    }
-}
-
-div.beagleBrewCP {
-    color: $color-cpText;
-    font-family: Raleway;
-    font-weight: bold;
-
-    div.beagleBrewCP-container {
-        transition: right 500ms;
-        right: -500px;
-        top: 0;
-        position: absolute;
-        width: calc(100%/3);
-        max-width: 500px;
-        min-width: 300px;
-        background: $color-cpMain;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-
-        span.button {
-            width: 100%;
-            position: relative;
-            padding: 20px;
-            text-transform: capitalize;
-            cursor: pointer;
-
-            &:before,
-            &:after {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                box-sizing: border-box;
-            }
-            &:after {
-                content: attr(data-text);
-                padding: 20px;
-            }
-            &:before {
-                content: "";
-                background: #444;
-                opacity: 0;
-                transition: opacity 100ms;
-            }
-            &:hover:before {
-                opacity: 0.25;
-            }
-
-            &.back {
-                background: $color-cpButton;
-            }
-
-            &.confirm {
-                background:  $color-cpButton;
-            }
-
-            &.cancel {
-                background: $color-cpCancel;
-            }
-        }
-
-        div.beagleBrewCP-contents {
-            &.modified {
-                & + div.beagleBrewCP-confirmation {
-                    display: flex;
-                }
-            }
-            div.beagleBrewCP-content {
-                padding: 20px;
-                display: flex;
-
-                span.asset-name {
-                    font-size: 1.5em;
-                }
-
-                span.content-title {
-                    display: block;
-                    text-transform: capitalize;
-                }
-
-                span.content-data {
-                    font-size: 2.5em;
-
-                    &:after {
-                        font-size: 0.6em;
-                        content: attr(data-unit);
-                    }
-                }
-            }
-        }
-
-        div.beagleBrewCP-confirmation {
-            position: absolute;
-            bottom: 0;
-            display: none;
-            flex-direction: column;
-            width: 100%;
-        }
     }
 }

@@ -437,54 +437,6 @@ html, body, #root, #root > div {
 	height: 100%;
 }
 
-div.beagleBrewGrid {
-	transform: scale(1);
-	transition: transform 500ms;
-	background: #22313F;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-div.beagleBrewGrid > div.beagleBrewGrid-tanks {
-	position: absolute;
-	width: 950px;
-	height: 700px;
-}
-
-div.beagleBrewGrid div.beagleBrewGrid-row {
-	display: flex;
-}
-
-div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square {
-	width: 50px;
-	height: 50px;
-}
-
-div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square :not(.clickable) {
-	pointer-events: none;
-}
-
-div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square .clickable {
-	cursor: pointer;
-}
-
-div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square .clickable:hover::after {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	box-sizing: border-box;
-	border: 1px dashed #ecf031;
-}
-
-div.openControlPanel div.beagleBrewGrid {
-	transform: scale(2);
-}
-
 div.openControlPanel div.beagleBrewCP div.beagleBrewCP-container {
 	right: 0px;
 }
@@ -581,12 +533,109 @@ div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-contents div.beagle
 	content: attr(data-unit);
 }
 
+div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-contents div.beagleBrewCP-content label.switch {
+	position: relative;
+	width: 100px;
+	height: 50px;
+	cursor: pointer;
+}
+
+div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-contents div.beagleBrewCP-content label.switch input {
+	display: none;
+}
+
+div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-contents div.beagleBrewCP-content label.switch:before, div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-contents div.beagleBrewCP-content label.switch:after {
+	top: 0;
+	display: flex;
+	position: absolute;
+	height: 40px;
+	box-sizing: border-box;
+}
+
+div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-contents div.beagleBrewCP-content label.switch:before {
+	content: 'OFF';
+	background: #d24d57;
+	width: 100px;
+	transition: background 250ms;
+	font-family: Raleway;
+	font-weight: bold;
+	color: #ecf0f1;
+	padding: 10px;
+	align-items: center;
+}
+
+div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-contents div.beagleBrewCP-content label.switch:after {
+	content: '';
+	transition: right 250ms;
+	width: 50px;
+	right: 0;
+	background-color: #ecf0f1;
+}
+
+div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-contents div.beagleBrewCP-content label.switch.checked:before {
+	content: 'ON';
+	background: #2ecc71;
+	justify-content: flex-end;
+}
+
+div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-contents div.beagleBrewCP-content label.switch.checked:after {
+	right: 50%;
+}
+
 div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-confirmation {
 	position: absolute;
 	bottom: 0;
 	display: none;
 	flex-direction: column;
 	width: 100%;
+}
+
+div.beagleBrewGrid {
+	transform: scale(1);
+	transition: transform 500ms;
+	background: #22313F;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+div.beagleBrewGrid .clickable {
+	cursor: pointer;
+}
+
+div.beagleBrewGrid > div.beagleBrewGrid-tanks {
+	position: absolute;
+	width: 950px;
+	height: 700px;
+}
+
+div.beagleBrewGrid div.beagleBrewGrid-row {
+	display: flex;
+}
+
+div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square {
+	width: 50px;
+	height: 50px;
+}
+
+div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square :not(.clickable) {
+	pointer-events: none;
+}
+
+div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square .clickable:hover::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 1px dashed #ecf031;
+}
+
+div.openControlPanel div.beagleBrewGrid {
+	transform: scale(2);
 }
 
 @keyframes rotate {
@@ -753,6 +802,6 @@ div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-confirmation {
 	transform-origin: 50%;
 }
 
-.brew-asset.valve.status-1, .brew-asset.valve.status-2 {
+.brew-asset.valve.status-1 .valve-icon, .brew-asset.valve.status-2 .valve-icon {
 	transform: rotateZ(90deg);
 }
