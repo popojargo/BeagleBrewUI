@@ -11,13 +11,16 @@ class BrewGridStore extends EventEmitter {
     }
 
     // Actions / Emitters
+    initializeGrid(grid) {
+        this.brewAssets = grid;
+    }
     changeData(data) {
-        // change DB
+        this.brewAssets[data.y - 1][data.x - 1] = data;
         this.emit("change");
     }
     startDataFlow(asset) {
         if(this.dataFlow === null) {
-            asset.startDataFlow();
+            // asset.startDataFlow();
             this.activeAsset = asset;
             this.flowData(asset.state.data);
             this.emit("Toggle Control Panel");
@@ -25,13 +28,18 @@ class BrewGridStore extends EventEmitter {
     }
     stopDataFlow() {
         this.dataFlow = null;
-        this.activeAsset.stopDataFlow();
+        // this.activeAsset.stopDataFlow();
         this.emit("Toggle Control Panel");
         this.emit("Stopping Data Flow");
     }
     flowData(data) {
         this.dataFlow = data;
         this.emit("Flowing Data");
+    }
+    toggleFluid(data) {
+        for(const dest of data.destinations) {
+            // console.log(this.brewAssets[dest.y][dest.x])
+        }
     }
 
     // Getters
@@ -45,6 +53,9 @@ class BrewGridStore extends EventEmitter {
     // Handlers
     handleActions(action) {
         switch(action.type) {
+            case "INIT_GRID":
+                this.initializeGrid(action.grid);
+                break;
             case "CHANGE_DATA":
                 this.changeData(action.data);
                 break;
@@ -56,6 +67,9 @@ class BrewGridStore extends EventEmitter {
                 break;
             case "FLOW_DATA":
                 this.flowData(action.data);
+                break;
+            case "TOGGLE_FLUID":
+                this.toggleFluid(action.affectedAssetsData);
                 break;
             default:
         }

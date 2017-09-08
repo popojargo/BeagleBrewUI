@@ -7,7 +7,7 @@
         animation: 2s linear 0s infinite normal forwards paused rotate;
     }
 
-    &.status-1 {
+    &.active {
         .pump-icon {
             animation-play-state: running;
         }

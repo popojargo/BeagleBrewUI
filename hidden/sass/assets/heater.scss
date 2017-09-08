@@ -5,7 +5,7 @@
         animation: 1s ease-in-out 0s infinite alternate backwards paused opacity;
     }
 
-    &.status-1 {
+    &.active {
         .heater-vapor:nth-of-type(2) {
             animation-delay: 500ms;
         }

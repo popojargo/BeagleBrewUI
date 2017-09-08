@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-// import './style/css/App.css';
 import {
 	BrewAssetSquare,
 	BrewAssetTank
@@ -35,6 +34,7 @@ class App extends Component {
 			}
 			grid.push(gridRow);
 		}
+		BrewGridActions.initializeGrid(grid);
 
 		const tanks = this.filterAsset("tank");
 		for (i = 0; i < tanks.length; i++) {
@@ -192,7 +192,11 @@ class App extends Component {
 				}
 				data.posTubing = 0;
 			}
-
+			data.x = col + 1;
+			data.y = row + 1;
+			data.fluid = false;
+			data.liquid = 1;
+			data.active = false;
 			grid[row][col] = data;
 		}
 

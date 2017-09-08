@@ -12,8 +12,7 @@
     transition: stroke 1s, stroke-width 1s;
 }
 
-@mixin active-tube {
-    stroke: $color-active-1;
+@mixin contains-fluid-tube {
     stroke-width: $stroke-width-active;
 }
 
@@ -39,17 +38,83 @@
         @include default-tube;
     }
 
-    &.status-1 .tube,
-    &.intersection-tube.status-1 line,
-    &.intersection-tube.status-2 .tube-b,
-    &.intersection-tube.status-3 .tube-a,
-    &.cooler.status-1 .tube-a,
-    &.cooler.status-2 .tube-a,
-    &.pump.status-1 .tube,
-    &.pump.status-2 .tube,
-    &.valve.status-1 .tube,
-    &.valve.status-3 .tube-a {
-        @include active-tube;
+    &.fluid .tube,
+    &.fluid-a .tube-a,
+    &.fluid-b .tube-b,
+    &.fluid-c .tube-c {
+        @include contains-fluid-tube;
+    }
+
+    &.fluid {
+        &.liquid-1 {
+            .tube {
+                stroke: $color-active-1;
+            }
+        }
+        &.liquid-2 {
+            .tube {
+                stroke: $color-active-2;
+            }
+        }
+        &.liquid-3 {
+            .tube {
+                stroke: $color-active-3;
+            }
+        }
+    }
+
+    &.fluid-a {
+        &.liquid-1 {
+            .tube-a {
+                stroke: $color-active-1;
+            }
+        }
+        &.liquid-2 {
+            .tube-a {
+                stroke: $color-active-2;
+            }
+        }
+        &.liquid-3 {
+            .tube-a {
+                stroke: $color-active-3;
+            }
+        }
+    }
+
+    &.fluid-b {
+        &.liquid-1 {
+            .tube-b {
+                stroke: $color-active-1;
+            }
+        }
+        &.liquid-2 {
+            .tube-b {
+                stroke: $color-active-2;
+            }
+        }
+        &.liquid-3 {
+            .tube-b {
+                stroke: $color-active-3;
+            }
+        }
+    }
+
+    &.fluid-c {
+        &.liquid-1 {
+            .tube-c {
+                stroke: $color-active-1;
+            }
+        }
+        &.liquid-2 {
+            .tube-c {
+                stroke: $color-active-2;
+            }
+        }
+        &.liquid-3 {
+            .tube-c {
+                stroke: $color-active-3;
+            }
+        }
     }
 
     &.coil .tube,

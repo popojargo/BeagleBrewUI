@@ -432,6 +432,7 @@ template {
 	display: none;
 }
 
+/* ============================ normalize.css end ============================ */
 html, body, #root, #root > div {
 	overflow: hidden;
 	height: 100%;
@@ -692,18 +693,59 @@ div.openControlPanel div.beagleBrewGrid {
 	transition: stroke 1s, stroke-width 1s;
 }
 
-.brew-asset.status-1 .tube,
-.brew-asset.intersection-tube.status-1 line,
-.brew-asset.intersection-tube.status-2 .tube-b,
-.brew-asset.intersection-tube.status-3 .tube-a,
-.brew-asset.cooler.status-1 .tube-a,
-.brew-asset.cooler.status-2 .tube-a,
-.brew-asset.pump.status-1 .tube,
-.brew-asset.pump.status-2 .tube,
-.brew-asset.valve.status-1 .tube,
-.brew-asset.valve.status-3 .tube-a {
-	stroke: #19b5fe;
+.brew-asset.fluid .tube,
+.brew-asset.fluid-a .tube-a,
+.brew-asset.fluid-b .tube-b,
+.brew-asset.fluid-c .tube-c {
 	stroke-width: 7px;
+}
+
+.brew-asset.fluid.liquid-1 .tube {
+	stroke: #19b5fe;
+}
+
+.brew-asset.fluid.liquid-2 .tube {
+	stroke: #f5d76e;
+}
+
+.brew-asset.fluid.liquid-3 .tube {
+	stroke: #d24d57;
+}
+
+.brew-asset.fluid-a.liquid-1 .tube-a {
+	stroke: #19b5fe;
+}
+
+.brew-asset.fluid-a.liquid-2 .tube-a {
+	stroke: #f5d76e;
+}
+
+.brew-asset.fluid-a.liquid-3 .tube-a {
+	stroke: #d24d57;
+}
+
+.brew-asset.fluid-b.liquid-1 .tube-b {
+	stroke: #19b5fe;
+}
+
+.brew-asset.fluid-b.liquid-2 .tube-b {
+	stroke: #f5d76e;
+}
+
+.brew-asset.fluid-b.liquid-3 .tube-b {
+	stroke: #d24d57;
+}
+
+.brew-asset.fluid-c.liquid-1 .tube-c {
+	stroke: #19b5fe;
+}
+
+.brew-asset.fluid-c.liquid-2 .tube-c {
+	stroke: #f5d76e;
+}
+
+.brew-asset.fluid-c.liquid-3 .tube-c {
+	stroke: #d24d57;
 }
 
 .brew-asset.coil .tube,
@@ -740,7 +782,7 @@ div.openControlPanel div.beagleBrewGrid {
 	animation: 1s ease-in-out 0s infinite alternate forwards paused translateX;
 }
 
-.brew-asset.input-tube.status-1 .arrow {
+.brew-asset.input-tube.fluid .arrow {
 	animation-play-state: running;
 }
 
@@ -748,7 +790,7 @@ div.openControlPanel div.beagleBrewGrid {
 	animation: 1s ease-in-out 0s infinite alternate forwards paused translateX;
 }
 
-.brew-asset.output-tube.status-1 .arrow {
+.brew-asset.output-tube.fluid .arrow {
 	animation-play-state: running;
 }
 
@@ -760,11 +802,11 @@ div.openControlPanel div.beagleBrewGrid {
 	animation: 1s ease-in-out 0s infinite alternate backwards paused opacity;
 }
 
-.brew-asset.heater.status-1 .heater-vapor:nth-of-type(2) {
+.brew-asset.heater.active .heater-vapor:nth-of-type(2) {
 	animation-delay: 500ms;
 }
 
-.brew-asset.heater.status-1 .heater-vapor {
+.brew-asset.heater.active .heater-vapor {
 	stroke: #f2784b;
 	animation-play-state: running;
 }
@@ -773,17 +815,12 @@ div.openControlPanel div.beagleBrewGrid {
 	animation: 1s ease-in-out 0s infinite alternate backwards paused opacity;
 }
 
-.brew-asset.cooler.status-1 .cooler-icon polyline, .brew-asset.cooler.status-2 .cooler-icon polyline {
-	stroke: #19b5fe;
-}
-
-.brew-asset.cooler.status-1 .tube-b, .brew-asset.cooler.status-3 .tube-b {
-	stroke: #f5d76e;
-	stroke-width: 7px;
-}
-
-.brew-asset.cooler.status-1 .cooler-icon {
+.brew-asset.cooler.active .cooler-icon {
 	animation-play-state: running;
+}
+
+.brew-asset.cooler.active .cooler-icon polyline {
+	stroke: #19b5fe;
 }
 
 .brew-asset.pump .pump-icon {
@@ -792,7 +829,7 @@ div.openControlPanel div.beagleBrewGrid {
 	animation: 2s linear 0s infinite normal forwards paused rotate;
 }
 
-.brew-asset.pump.status-1 .pump-icon {
+.brew-asset.pump.active .pump-icon {
 	animation-play-state: running;
 }
 
@@ -802,6 +839,6 @@ div.openControlPanel div.beagleBrewGrid {
 	transform-origin: 50%;
 }
 
-.brew-asset.valve.status-1 .valve-icon, .brew-asset.valve.status-2 .valve-icon {
+.brew-asset.valve.active .valve-icon {
 	transform: rotateZ(90deg);
 }
