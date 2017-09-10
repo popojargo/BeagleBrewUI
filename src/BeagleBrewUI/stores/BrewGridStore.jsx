@@ -1,18 +1,21 @@
 import { EventEmitter } from "events";
-import dispatcher from '../dispatcher';
-var brewAssets = require('../exampleDB/brewAssets.json');
+import dispatcher from '../../dispatcher';
+var brewAssets = require('../../exampleDB/brewAssets.json');
 
 class BrewGridStore extends EventEmitter {
     constructor() {
         super();
         this.brewAssets = brewAssets;
+        this.assetGrid = null;
+        this.tankGrid = null;
         this.dataFlow = null;
         this.activeAsset = null;
     }
 
     // Actions / Emitters
-    initializeGrid(grid) {
-        this.brewAssets = grid;
+    initializeGrid(assetGrid, tankGrid) {
+        this.assetGrid = assetGrid;
+        this.tankGrid = tankGrid;
     }
     changeData(data) {
         this.brewAssets[data.y - 1][data.x - 1] = data;
@@ -54,7 +57,7 @@ class BrewGridStore extends EventEmitter {
     handleActions(action) {
         switch(action.type) {
             case "INIT_GRID":
-                this.initializeGrid(action.grid);
+                this.initializeGrid(action.assetGrid, action.tankGrid);
                 break;
             case "CHANGE_DATA":
                 this.changeData(action.data);

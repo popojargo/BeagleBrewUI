@@ -1,9 +1,10 @@
-import dispatcher from "../dispatcher";
+import dispatcher from "../../dispatcher";
 
-export function initializeGrid(grid) {
+export function initializeGrid(assetGrid, tankGrid) {
     dispatcher.dispatch({
         type: "INIT_GRID",
-        grid
+        assetGrid,
+        tankGrid
     })
 }
 

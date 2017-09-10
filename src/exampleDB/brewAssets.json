@@ -230,6 +230,8 @@
     {
         "type": "misc",
         "assetId": "in",
+        "open": true,
+        "liquid": 1,
         "x": 1,
         "y": 1
     },

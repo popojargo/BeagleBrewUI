@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import BrewGridStore from './stores/BrewGridStore';
-import * as BrewGridActions from './actions/BrewGridActions';
-const variables = require('./exampleDB/controlPanelVariables.json');
+import BrewGridStore from '../stores/BrewGridStore';
+import * as BrewGridActions from '../actions/BrewGridActions';
+const variables = require('../../exampleDB/controlPanelVariables.json');
 
 class BrewGridControlPanel extends Component {
     constructor(props) {
