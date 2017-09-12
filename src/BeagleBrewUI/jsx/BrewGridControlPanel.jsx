@@ -131,6 +131,7 @@ class Name extends Component {
 
 class DefaultContent extends Component {
     render() {
+        //TODO: Bind columns to unit classes
         const dataName = this.props.dataName;
         var unit = "";
         if(dataName in variables) {

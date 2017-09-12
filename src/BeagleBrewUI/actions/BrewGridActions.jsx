@@ -1,8 +1,9 @@
 import dispatcher from "../../dispatcher";
+import * as CST from '../js/constants';
 
 export function initializeGrid(assetGrid, tankGrid) {
     dispatcher.dispatch({
-        type: "INIT_GRID",
+        type: CST.INIT_GRID,
         assetGrid,
         tankGrid
     })
@@ -10,34 +11,42 @@ export function initializeGrid(assetGrid, tankGrid) {
 
 export function changeData(data) {
     dispatcher.dispatch({
-        type: "CHANGE_DATA",
+        type: CST.CHANGE_DATA,
         data
     });
 }
 
 export function requestDataFlow(asset) {
     dispatcher.dispatch({
-        type: "START_DATAFLOW",
+        type: CST.START_DATAFLOW,
         asset
     });
 }
 
 export function stopDataFlow() {
     dispatcher.dispatch({
-        type: "STOP_DATAFLOW"
+        type: CST.STOP_DATAFLOW
     });
 }
 
 export function flowData(data) {
     dispatcher.dispatch({
-        type: "FLOW_DATA",
+        type: CST.FLOW_DATA,
         data
     })
 }
 
 export function toggleFluid(affectedAssetsData) {
     dispatcher.dispatch({
-        type: "TOGGLE_FLUID",
+        type: CST.TOGGLE_FLUID,
         affectedAssetsData
     })
 }
+
+export function changeStates(data) {
+    dispatcher.dispatch({
+        type: CST.CHANGE_STATES,
+        data
+    })
+}
+
