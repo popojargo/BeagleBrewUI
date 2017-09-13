@@ -23,7 +23,6 @@ class BrewGridInit {
             }
             this.assetGrid.push(gridRow);
         }
-        // BrewGridActions.initializeGrid(this.assetGrid);
 
         const tanks = this.filterAsset("tank");
         for(const tank of tanks) {
@@ -174,9 +173,6 @@ class BrewGridInit {
         }
         data.x = x + 1;
         data.y = y + 1;
-        data.fluid = false;
-        data.liquid = 1;
-        data.active = false;
         this.assetGrid[y][x] = data;
     }
     addMiscAsset(misc) {

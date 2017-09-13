@@ -19,6 +19,7 @@ class FluidSimulation {
             var elem = {
                 x: asset.x,
                 y: asset.y,
+                liquid: asset.liquid,
                 direction: asset.rotation
             };
             switch (asset.assetId) {
@@ -142,8 +143,10 @@ class FluidSimulation {
                 fluidState = false;
                 if(!((fluid.direction / 90) % 2)) {
                     asset.fluidA = true;
+                    asset.liquidA = fluid.liquid;
                 } else {
                     asset.fluidB = true;
+                    asset.liquidB = fluid.liquid;
                 }
                 fluid.moveUp();
                 break;
@@ -159,17 +162,19 @@ class FluidSimulation {
             case "cool":
                 // Cooler
                 // straight
-                fluidState = false;
                 asset.active = false;
+                fluidState = false;
                 if(!((fluid.direction / 90) % 2)) {
                     asset.fluidA = true;
+                    asset.liquidA = fluid.liquid;
                 } else {
                     asset.fluidB = true;
+                    asset.liquidB = fluid.liquid;
                 }
+                fluid.moveUp();
                 if(asset.fluidA && asset.fluidB) {
                     asset.active = true;
                 }
-                fluid.moveUp();
                 // fluidA - fluidB / liquidA - liquidB
                 break;
             case "valv":
@@ -183,6 +188,7 @@ class FluidSimulation {
                     }
                 } else {
                     fluidState = false;
+                    asset.liquid = fluid.liquid;
                     if(fluid.direction === asset.rotation) {
                         asset.fluidA = true;
                     } else {
@@ -200,8 +206,10 @@ class FluidSimulation {
             console.log("something is bad")
             return;
         }
+        asset.liquid = fluid.liquid;
         asset.fluid = fluidState;
         if(this.checkEnding(point)) return;
+        if(this.assetGrid[fluid.y][fluid.x] == null) return;
         this.addFluid(fluid);
         this.assetGrid[point.y][point.x] = asset;
     }
@@ -230,11 +238,8 @@ class Fluid {
     constructor(startPoint) {
         this.x = startPoint.x;
         this.y = startPoint.y;
-        if(typeof startPoint.direction === "undefined") {
-            // do something
-        } else {
-            this.direction = startPoint.direction;
-        }
+        this.direction = startPoint.direction;
+        this.liquid = startPoint.liquid;
         this.updateFluid();
 
         // this.move = this.move.bind(this);
@@ -291,6 +296,7 @@ class Fluid {
         const currentPoint = {
             x: this.x,
             y: this.y,
+            liquid: this.liquid,
             direction: this.direction
         };
         return new Fluid(currentPoint);

@@ -76,22 +76,6 @@ class BrewAsset extends Component {
         return fluid + liquid;
     }
 
-    // receiveFluid(origin) {
-    //     //
-    //     // this.
-    // }
-    // getFluidDestinationData(destinations, sendingFluid, liquidType) {
-    //     var destinationData = {
-    //         fluid: sendingFluid,
-    //         liquid: liquidType,
-    //         origin: {
-    //             x: this.props.data.x,
-    //             y: this.props.data.y
-    //         },
-    //         destinations: destinations
-    //     }
-    //     return destinationData;
-    // }
     toggleNextFluid(affectedAssetsData) {
         BrewGridActions.toggleFluid(affectedAssetsData);
     }
@@ -105,9 +89,6 @@ class BrewAsset extends Component {
         return elemClass;
     }
 
-    // componentWillUpdate(nextProps) {
-    //
-    // }
     render(assetCode, assetClass, hasRotation) {
         return (
             <div className={this.getClass(assetClass, hasRotation)}>
@@ -121,8 +102,6 @@ class BrewAssetClickable extends BrewAsset {
     constructor(props) {
         super(props);
         this.clickHandler = this.clickHandler.bind(this);
-        // this.startDataFlow = this.startDataFlow.bind(this);
-        // this.stopDataFlow = this.stopDataFlow.bind(this);
         const prop = props.data.prop;
         this.state = {
             data: props.data,
@@ -135,21 +114,6 @@ class BrewAssetClickable extends BrewAsset {
         BrewGridActions.requestDataFlow(this);
     }
 
-    // startDataFlow() {
-    //     this.setState({
-    //         flowingData: true
-    //     });
-    // }
-    // stopDataFlow() {
-    //     this.setState({
-    //         flowingData: false
-    //     });
-    // }
-    // changeData(newData) {
-    //     this.setState((prevState) => ({
-    //         data: Object.assign({}, prevState.data, newData)
-    //     }));
-    // }
     getClass(assetClass, hasRotation) {
         const clickableClass = " clickable";
         return super.getClass(assetClass, hasRotation) + clickableClass;
@@ -192,8 +156,6 @@ class BrewAssetTank extends BrewAssetClickable {
         const height = (data.height * 50) + "px";
         const x = (data.x * 50 - 5) + "px";
         const y = (data.y * 50 - 5) + "px";
-        // const width = data.width;
-        // const height = data.height;
 
         var assetCode =
             <div className="tank" style={{width: width, height: height, left: x, top: y}}>
@@ -265,32 +227,6 @@ class BrewAssetIntersectionTube extends BrewAsset {
 }
 
 class BrewAssetInputTube extends BrewAsset {
-    // sendFluid() {
-    //     var destinations = [];
-    //     var dest = {
-    //         x: this.props.data.x,
-    //         y: this.props.data.y
-    //     }
-    //     switch(this.props.data.rotation) {
-    //         case 0:
-    //             dest.x++;
-    //             break;
-    //         case 90:
-    //             dest.y++;
-    //             break;
-    //         case 180:
-    //             dest.x--;
-    //             break;
-    //         case 270:
-    //             dest.y--;
-    //             break;
-    //         default:
-    //             // nothing
-    //     }
-    //     destinations.push(dest);
-    //     var data = super.getFluidDestinationData(destinations, true, 1);
-    //     super.toggleNextFluid(data);
-    // }
     render() {
         const assetClass = "input-tube";
         const assetCode =
