@@ -10,6 +10,7 @@ class BrewGridStore extends EventEmitter {
         super();
         this.brewAssets = brewAssets;
         this.assetMap = this.initAssetMap();
+        this.assetStatus = null;
 
         this.tankGrid = null;
         this.dataFlow = null;
@@ -60,9 +61,20 @@ class BrewGridStore extends EventEmitter {
         }
     }
 
+    toggleAsset(id) {
+        // check asset status in this.assetStatus
+        // toggle status
+        // emit to server
+        // emit to UI client
+    }
+
     // Getters
     getBrewAssets() {
         return this.brewAssets;
+    }
+
+    getAssetStatus() {
+        return this.assetStatus;
     }
 
     // getAssetGrid() {
@@ -139,6 +151,9 @@ class BrewGridStore extends EventEmitter {
                 else
                     this.changeStates(action.data);
                 this.emit("change");
+                break;
+            case CST.TOGGLE_ASSET:
+                this.toggleAsset(action.id);
                 break;
             default:
         }

@@ -6,3 +6,4 @@ export const STOP_DATAFLOW = "STOP_DATAFLOW";
 export const FLOW_DATA = "FLOW_DATA";
 export const TOGGLE_FLUID = "TOGGLE_FLUID";
 export const CHANGE_STATES = "CHANGE_STATES";
+export const TOGGLE_ASSET = "TOGGLE_ASSET";

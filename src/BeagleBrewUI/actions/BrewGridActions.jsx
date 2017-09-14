@@ -42,3 +42,10 @@ export function changeStates(data) {
         data
     })
 }
+
+export function toggleAsset(id) {
+    dispatcher.dispatch({
+        type: CST.TOGGLE_ASSET,
+        id
+    })
+}

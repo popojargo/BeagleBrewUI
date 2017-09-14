@@ -135,8 +135,10 @@ class BrewAssetClickable extends BrewAsset {
 class BrewAssetToggle extends BrewAssetClickable {
     clickHandler() {
         var data = this.props.data;
-        data.active = !data.active;
-        BrewGridActions.changeData(data);
+        // data.active = !data.active;
+        // BrewGridActions.changeData(data);
+
+        BrewGridActions.toggleAsset(data.id);
     }
 }
 
