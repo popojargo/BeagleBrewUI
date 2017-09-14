@@ -2,11 +2,40 @@ class FluidSimulation {
     constructor(assetGrid, tankGrid) {
         this.assetGrid = assetGrid;
         this.tankGrid = tankGrid;
+        this.fluidGrid = [];
         this.starts = [];
         this.ends = [];
 
+
+        this.initializeGrid();
         this.findStartsEnds();
         this.simulateFluid();
+    }
+    initializeGrid() {
+        for(const gridRow of this.assetGrid) {
+            let row = [];
+            for(const asset of gridRow) {
+                if(asset === null) {
+                    row.push(null);
+                    continue;
+                }
+                let assetFluid = {
+                    fluid: false,
+                    liquid: 1
+                }
+                if(asset.assetId === "t4" || asset.assetId === "cool") {
+                    assetFluid.fluidA = false;
+                    assetFluid.fluidB = false;
+                    assetFluid.liquidA = 1;
+                    assetFluid.liquidB = 1;
+                }
+                row.push(assetFluid);
+            }
+            this.fluidGrid.push(row);
+        }
+    }
+    getFluidGrid() {
+        return this.fluidGrid;
     }
     getAssetGrid() {
         return this.assetGrid;
@@ -14,11 +43,11 @@ class FluidSimulation {
     /* Adds the starts and ends of fluids */
     findStartsEnds() {
         // Find I/O in grid assets
-        this.arrayScan(this.assetGrid, (asset) => {
+        this.arrayScan(this.assetGrid, (asset, i) => {
             if(asset === null) return;
             var elem = {
-                x: asset.x,
-                y: asset.y,
+                x: i[1] + 1,
+                y: i[0] + 1,
                 liquid: asset.liquid,
                 direction: asset.rotation
             };
@@ -78,15 +107,15 @@ class FluidSimulation {
     simulateFluid() {
         this.removeFluid();
         for(const startPoint of this.starts) {
-            // if(startPoint.open) {
+            if(startPoint.open) {
                 var fluid = new Fluid(startPoint);
                 this.addFluid(fluid);
-            // }
+            }
         }
     }
     /* Removes fluid off the system */
     removeFluid() {
-        this.arrayScan(this.assetGrid, (asset) => {
+        this.arrayScan(this.fluidGrid, (asset) => {
             if(asset === null) return;
             asset.fluid = false;
             asset.fluidA = asset.fluidA ? false : null;
@@ -97,11 +126,12 @@ class FluidSimulation {
     /* Adds fluid to point */
     addFluid(fluid) {
         var asset = this.assetGrid[fluid.y][fluid.x];
+        var assetFluid = this.fluidGrid[fluid.y][fluid.x];
         const point = {
             x: fluid.x,
             y: fluid.y
         };
-        console.log(point)
+        // console.log(point)
         var fluidState = true;
         switch(asset.assetId) {
             case "t2":
@@ -142,11 +172,11 @@ class FluidSimulation {
                 // fluidA - fluidB / liquidA - liquidB
                 fluidState = false;
                 if(!((fluid.direction / 90) % 2)) {
-                    asset.fluidA = true;
-                    asset.liquidA = fluid.liquid;
+                    assetFluid.fluidA = true;
+                    assetFluid.liquidA = fluid.liquid;
                 } else {
-                    asset.fluidB = true;
-                    asset.liquidB = fluid.liquid;
+                    assetFluid.fluidB = true;
+                    assetFluid.liquidB = fluid.liquid;
                 }
                 fluid.moveUp();
                 break;
@@ -162,19 +192,15 @@ class FluidSimulation {
             case "cool":
                 // Cooler
                 // straight
-                asset.active = false;
                 fluidState = false;
                 if(!((fluid.direction / 90) % 2)) {
-                    asset.fluidA = true;
-                    asset.liquidA = fluid.liquid;
+                    assetFluid.fluidA = true;
+                    assetFluid.liquidA = fluid.liquid;
                 } else {
-                    asset.fluidB = true;
-                    asset.liquidB = fluid.liquid;
+                    assetFluid.fluidB = true;
+                    assetFluid.liquidB = fluid.liquid;
                 }
                 fluid.moveUp();
-                if(asset.fluidA && asset.fluidB) {
-                    asset.active = true;
-                }
                 // fluidA - fluidB / liquidA - liquidB
                 break;
             case "valv":
@@ -182,17 +208,18 @@ class FluidSimulation {
                 // straight
                 if(asset.active) {
                     fluid.moveUp();
-                    if(asset.fluid) {
+                    if(assetFluid.fluid) {
                         // TODO: don't cross the streams!
                         return;
                     }
                 } else {
                     fluidState = false;
-                    asset.liquid = fluid.liquid;
                     if(fluid.direction === asset.rotation) {
-                        asset.fluidA = true;
+                        assetFluid.liquidA = fluid.liquid;
+                        assetFluid.fluidA = true;
                     } else {
-                        asset.fluidB = true;
+                        assetFluid.liquidB = fluid.liquid;
+                        assetFluid.fluidB = true;
                     }
                     return;
                 }
@@ -206,12 +233,12 @@ class FluidSimulation {
             console.log("something is bad")
             return;
         }
-        asset.liquid = fluid.liquid;
-        asset.fluid = fluidState;
+        assetFluid.liquid = fluid.liquid;
+        assetFluid.fluid = fluidState;
         if(this.checkEnding(point)) return;
-        if(this.assetGrid[fluid.y][fluid.x] == null) return;
+        if(this.fluidGrid[fluid.y][fluid.x] == null) return;
         this.addFluid(fluid);
-        this.assetGrid[point.y][point.x] = asset;
+        // this.assetGrid[point.y][point.x] = asset;
     }
     /* Returns true if there is an end at specified point */
     checkEnding(point) {
@@ -223,14 +250,17 @@ class FluidSimulation {
         return false;
     }
     /* Applies the parameter function to the bottom children of the array */
-    arrayScan(arr, f) {
-        for(let elem of arr) {
+    arrayScan(arr, f, indexes) {
+        let prevIndex = typeof indexes !== "undefined" ? indexes.slice(0) : [];
+        arr.forEach((elem, i) => {
+            let newIndex = prevIndex.slice(0);
+            newIndex.push(i);
             if(Array.isArray(elem)) {
-                this.arrayScan(elem, f);
+                this.arrayScan(elem, f, newIndex);
             } else {
-                f(elem);
+                f(elem, newIndex);
             }
-        }
+        })
     }
 }
 

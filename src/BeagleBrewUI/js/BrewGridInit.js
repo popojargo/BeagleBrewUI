@@ -38,6 +38,8 @@ class BrewGridInit {
         for(const misc of miscs) {
             this.addMiscAsset(misc);
         }
+
+        this.cleanupData();
     }
     addTank(tank) {
         for(var i = 0; i < tank.inputs.length; i++) {
@@ -185,6 +187,28 @@ class BrewGridInit {
         }
         misc = Object.assign({}, this.assetGrid[y][x], misc);
         this.assetGrid[y][x] = misc;
+    }
+    cleanupData() {
+        let cleanGrid = [];
+        for(const row of this.assetGrid) {
+            let cleanRow = [];
+            for(const asset of row) {
+                if(asset === null) {
+                    cleanRow.push(null);
+                    continue;
+                }
+                let cleanData = {
+                    id: asset.id,
+                    assetId: asset.assetId,
+                    rotation: asset.rotation,
+                    liquid: asset.liquid,
+                    open: asset.open
+                };
+                cleanRow.push(cleanData);
+            }
+            cleanGrid.push(cleanRow);
+        }
+        this.assetGrid = cleanGrid;
     }
     sortNumbers(a, b) {
         return a - b;

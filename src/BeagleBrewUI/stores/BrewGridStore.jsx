@@ -11,7 +11,6 @@ class BrewGridStore extends EventEmitter {
         this.brewAssets = brewAssets;
         this.assetMap = this.initAssetMap();
 
-        this.assetGrid = null;
         this.tankGrid = null;
         this.dataFlow = null;
         this.activeAsset = null;
@@ -41,13 +40,14 @@ class BrewGridStore extends EventEmitter {
     }
 
     // Actions / Emitters
-    initializeGrid(assetGrid, tankGrid) {
-        this.assetGrid = assetGrid;
-        this.tankGrid = tankGrid;
-    }
+    // initializeGrid(assetGrid, tankGrid) {
+    //     this.assetGrid = assetGrid;
+    //     this.tankGrid = tankGrid;
+    // }
 
     changeData(data) {
-        this.brewAssets[data.y - 1][data.x - 1] = data;
+        console.log(data)
+        // this.assetGrid[data.y - 1][data.x - 1] = data;
         this.emit("change");
     }
 
@@ -60,28 +60,14 @@ class BrewGridStore extends EventEmitter {
         }
     }
 
-    stopDataFlow() {
-        this.dataFlow = null;
-        // this.activeAsset.stopDataFlow();
-        this.emit("Toggle Control Panel");
-        this.emit("Stopping Data Flow");
-    }
-
-    flowData(data) {
-        this.dataFlow = data;
-        this.emit("Flowing Data");
-    }
-
-    toggleFluid(data) {
-        for (const dest of data.destinations) {
-            // console.log(this.brewAssets[dest.y][dest.x])
-        }
-    }
-
     // Getters
     getBrewAssets() {
         return this.brewAssets;
     }
+
+    // getAssetGrid() {
+    //     return this.assetGrid;
+    // }
 
     getDataFlow() {
         return this.dataFlow;
@@ -137,29 +123,17 @@ class BrewGridStore extends EventEmitter {
 
     // Handlers
     handleActions(action) {
-        debugger;
+        // debugger;
         switch (action.type) {
-            case CST.INIT_GRID:
-                this.initializeGrid(action.assetGrid, action.tankGrid);
-                break;
+            // case CST.INIT_GRID:
+            //     this.initializeGrid(action.assetGrid, action.tankGrid);
+            //     break;
             case CST.CHANGE_DATA:
                 //TODO: Do we want to update the asset locally? We could assume that it works but this could lead to some weird behaviors if the API call failed.
                 this.changeData(action.data);
                 break;
-            case CST.START_DATAFLOW:
-                this.startDataFlow(action.asset);
-                break;
-            case CST.STOP_DATAFLOW:
-                this.stopDataFlow();
-                break;
-            case CST.FLOW_DATA:
-                this.flowData(action.data);
-                break;
-            case CST.TOGGLE_FLUID:
-                this.toggleFluid(action.affectedAssetsData);
-                break;
             case CST.CHANGE_STATES:
-                debugger;
+                // debugger;
                 if (action.data.ForceInit)
                     this.forceChangeStates(action.data);
                 else

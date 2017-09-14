@@ -64,17 +64,17 @@
     }
 
     &.fluid-a {
-        &.liquid-1 {
+        &.liquidA-1 {
             .tube-a {
                 stroke: $color-active-1;
             }
         }
-        &.liquid-2 {
+        &.liquidA-2 {
             .tube-a {
                 stroke: $color-active-2;
             }
         }
-        &.liquid-3 {
+        &.liquidA-3 {
             .tube-a {
                 stroke: $color-active-3;
             }
@@ -82,17 +82,17 @@
     }
 
     &.fluid-b {
-        &.liquid-1 {
+        &.liquidB-1 {
             .tube-b {
                 stroke: $color-active-1;
             }
         }
-        &.liquid-2 {
+        &.liquidB-2 {
             .tube-b {
                 stroke: $color-active-2;
             }
         }
-        &.liquid-3 {
+        &.liquidB-3 {
             .tube-b {
                 stroke: $color-active-3;
             }
@@ -100,17 +100,17 @@
     }
 
     &.fluid-c {
-        &.liquid-1 {
+        &.liquidC-1 {
             .tube-c {
                 stroke: $color-active-1;
             }
         }
-        &.liquid-2 {
+        &.liquidC-2 {
             .tube-c {
                 stroke: $color-active-2;
             }
         }
-        &.liquid-3 {
+        &.liquidC-3 {
             .tube-c {
                 stroke: $color-active-3;
             }

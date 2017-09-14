@@ -4,47 +4,48 @@ import * as BrewGridActions from '../actions/BrewGridActions';
 
 class BrewAssetSquare extends Component {
     render() {
-        var asset = null;
+        let asset;
         if (this.props.assetData) {
             const assetData = this.props.assetData;
+            let fluid = this.props.fluid;
             switch (this.props.assetData.assetId) {
                 case "t1":
-                    asset = <BrewAssetDefaultTube data={assetData}/>;
+                    asset = <BrewAssetDefaultTube fluid={fluid} data={assetData}/>;
                     break;
                 case "t2":
-                    asset = <BrewAssetCurvedTube data={assetData}/>;
+                    asset = <BrewAssetCurvedTube fluid={fluid} data={assetData}/>;
                     break;
                 case "t3":
-                    asset = <BrewAssetTConnectorTube data={assetData}/>;
+                    asset = <BrewAssetTConnectorTube fluid={fluid} data={assetData}/>;
                     break;
                 case "t4":
-                    asset = <BrewAssetIntersectionTube data={assetData}/>;
+                    asset = <BrewAssetIntersectionTube fluid={fluid} data={assetData}/>;
                     break;
                 case "in":
-                    asset = <BrewAssetInputTube data={assetData}/>;
+                    asset = <BrewAssetInputTube fluid={fluid} data={assetData}/>;
                     break;
                 case "out":
-                    asset = <BrewAssetOutputTube data={assetData}/>;
+                    asset = <BrewAssetOutputTube fluid={fluid} data={assetData}/>;
                     break;
                 case "coil":
-                    asset = <BrewAssetCoil data={assetData}/>;
+                    asset = <BrewAssetCoil fluid={fluid} data={assetData}/>;
                     break;
                 case "heat":
                     asset = <BrewAssetHeater data={assetData}/>;
                     break;
                 case "cool":
-                    asset = <BrewAssetCooler data={assetData}/>;
+                    asset = <BrewAssetCooler fluid={fluid} data={assetData}/>;
                     break;
                 case "pump":
                     asset =
-                        <BrewAssetPump data={assetData} handler={this.props.handler} dataFlow={this.props.dataFlow}/>;
+                        <BrewAssetPump fluid={fluid} data={assetData}/>;
                     break;
                 case "valv":
                     asset =
-                        <BrewAssetValve data={assetData} handler={this.props.handler} dataFlow={this.props.dataFlow}/>;
+                        <BrewAssetValve fluid={fluid} data={assetData}/>;
                     break;
                 case "show":
-                    asset = <BrewAssetShower data={assetData}/>;
+                    asset = <BrewAssetShower fluid={fluid} data={assetData}/>;
                     break;
                 default:
                 //null
@@ -71,13 +72,16 @@ class BrewAsset extends Component {
     }
 
     getFluidClass() {
-        var fluid = this.props.data.fluid ? " fluid" : "";
-        var liquid = this.props.data.fluid ? " liquid-" + this.props.data.liquid : "";
-        return fluid + liquid;
-    }
-
-    toggleNextFluid(affectedAssetsData) {
-        BrewGridActions.toggleFluid(affectedAssetsData);
+        let assetFluid = this.props.fluid;
+        let fluid = assetFluid.fluid ? " fluid" : "";
+        let fluidA = assetFluid.fluidA ? " fluid-a" : "";
+        let fluidB = assetFluid.fluidB ? " fluid-b" : "";
+        let fluidC = assetFluid.fluidC ? " fluid-c" : "";
+        let liquid = assetFluid.liquid ? " liquid-" + assetFluid.liquid : "";
+        let liquidA = assetFluid.liquidA ? " liquidA-" + assetFluid.liquidA : "";
+        let liquidB = assetFluid.liquidB ? " liquidB-" + assetFluid.liquidB : "";
+        let liquidC = assetFluid.liquidC ? " liquidC-" + assetFluid.liquidC : "";
+        return fluid + fluidA + fluidB + fluidC + liquid + liquidA + liquidB + liquidC;
     }
 
     getClass(assetClass, hasRotation) {
@@ -148,7 +152,9 @@ class BrewAssetTank extends BrewAssetClickable {
             BrewGridActions.flowData(this.state.data);
         }
     }
-
+    getAssetStatusClass() {
+        return "";
+    }
     render() {
         const assetClass = "tank";
         var data = this.props.data;
@@ -201,16 +207,16 @@ class BrewAssetTConnectorTube extends BrewAsset {
 }
 
 class BrewAssetIntersectionTube extends BrewAsset {
-    getFluidClass() {
-        var fluid = this.props.data.fluid ? " fluid" : "";
-        var fluidA = this.props.data.fluidA ? " fluid-a" : "";
-        var fluidB = this.props.data.fluidB ? " fluid-b" : "";
-        var liquid = "";
-        if (fluid + fluidA + fluidB != "") {
-            liquid = " liquid-" + this.props.data.liquid;
-        }
-        return fluid + fluidA + fluidB + liquid;
-    }
+    // getFluidClass() {
+    //     var fluid = this.props.data.fluid ? " fluid" : "";
+    //     var fluidA = this.props.data.fluidA ? " fluid-a" : "";
+    //     var fluidB = this.props.data.fluidB ? " fluid-b" : "";
+    //     var liquid = "";
+    //     if (fluid + fluidA + fluidB != "") {
+    //         liquid = " liquid-" + this.props.data.liquid;
+    //     }
+    //     return fluid + fluidA + fluidB + liquid;
+    // }
 
     render() {
         const assetClass = "intersection-tube";
@@ -283,6 +289,9 @@ class BrewAssetCoil extends BrewAsset {
 }
 
 class BrewAssetHeater extends BrewAsset {
+    getFluidClass() {
+        return;
+    }
     render() {
         const assetClass = "heater";
         const assetCode =
@@ -300,14 +309,9 @@ class BrewAssetHeater extends BrewAsset {
 
 class BrewAssetCooler extends BrewAsset {
     getFluidClass() {
-        var fluid = this.props.data.fluid ? " fluid" : "";
-        var fluidA = this.props.data.fluidA ? " fluid-a" : "";
-        var fluidB = this.props.data.fluidB ? " fluid-b" : "";
-        var liquid = "";
-        if (fluid + fluidA + fluidB != "") {
-            liquid = " liquid-" + this.props.data.liquid;
-        }
-        return fluid + fluidA + fluidB + liquid;
+        let assetFluid = this.props.fluid;
+        let activeClass = assetFluid.fluidA && assetFluid.fluidB ? " active" : "";
+        return super.getFluidClass() + activeClass;
     }
 
     render() {
@@ -370,16 +374,16 @@ class BrewAssetValve extends BrewAssetToggle {
             super.isActive();
     }
 
-    getFluidClass() {
-        var fluid = this.props.data.fluid ? " fluid" : "";
-        var fluidA = this.props.data.fluidA ? " fluid-a" : "";
-        var fluidB = this.props.data.fluidB ? " fluid-b" : "";
-        var liquid = "";
-        if (fluid + fluidA + fluidB != "") {
-            liquid = " liquid-" + this.props.data.liquid;
-        }
-        return fluid + fluidA + fluidB + liquid;
-    }
+    // getFluidClass() {
+    //     var fluid = this.props.data.fluid ? " fluid" : "";
+    //     var fluidA = this.props.data.fluidA ? " fluid-a" : "";
+    //     var fluidB = this.props.data.fluidB ? " fluid-b" : "";
+    //     var liquid = "";
+    //     if (fluid + fluidA + fluidB != "") {
+    //         liquid = " liquid-" + this.props.data.liquid;
+    //     }
+    //     return fluid + fluidA + fluidB + liquid;
+    // }
 
     render() {
         const assetClass = "valve";
