@@ -1,6 +1,6 @@
 [
   {
-    "id": "tank1",
+    "id": "Cuve1",
     "type": "tank",
     "x": 3,
     "y": 5,
@@ -28,7 +28,7 @@
     }
   },
   {
-    "id": "tank2",
+    "id": "Cuve2",
     "type": "tank",
     "x": 9,
     "y": 5,
@@ -52,7 +52,7 @@
     }
   },
   {
-    "id": "tank3",
+    "id": "Cuve3",
     "type": "tank",
     "x": 15,
     "y": 5,
@@ -239,32 +239,25 @@
     "y": 1
   },
   {
-    "id": "valve1",
+    "id": "Valve1",
     "type": "misc",
     "assetId": "valv",
     "x": 2,
     "y": 2
   },
   {
-    "id": "valve2",
+    "id": "Valve2",
     "type": "misc",
     "assetId": "valv",
     "x": 8,
     "y": 3
   },
   {
-    "id": "valve3",
+    "id": "Valve3",
     "type": "misc",
     "assetId": "valv",
     "x": 10,
     "y": 3
-  },
-  {
-    "id": "valve4",
-    "type": "misc",
-    "assetId": "valv",
-    "x": 18,
-    "y": 5
   },
   {
     "type": "misc",
@@ -279,14 +272,14 @@
     "y": 6
   },
   {
-    "id": "valve5",
+    "id": "Valve4",
     "type": "misc",
     "assetId": "valv",
     "x": 6,
     "y": 8
   },
   {
-    "id": "valve6",
+    "id": "Valve5",
     "type": "misc",
     "assetId": "valv",
     "x": 13,
@@ -305,7 +298,7 @@
     "y": 9
   },
   {
-    "id": "pump1",
+    "id": "Pompe1",
     "type": "misc",
     "assetId": "pump",
     "x": 8,
@@ -324,13 +317,14 @@
     "y": 9
   },
   {
-    "id": "pump2",
+    "id": "Pompe2",
     "type": "misc",
     "assetId": "pump",
     "x": 14,
     "y": 9
   },
   {
+    "id": "Valve6",
     "type": "misc",
     "assetId": "valv",
     "x": 6,

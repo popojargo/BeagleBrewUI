@@ -2,15 +2,17 @@ import {EventEmitter} from "events";
 import dispatcher from '../../dispatcher';
 import * as CST from '../js/constants';
 import Converter from '../js/converter';
+import ObjectScraper from '../js/ObjectScraper'
 
 var brewAssets = require('../../exampleDB/gridLayout.json');
+var exampleStatus = require('../../exampleDB/exampleStatus.json');
 
 class BrewGridStore extends EventEmitter {
     constructor() {
         super();
         this.brewAssets = brewAssets;
         this.assetMap = this.initAssetMap();
-        this.assetStatus = null;
+        this.assetStatus = exampleStatus; // Will be updated by the server
 
         this.tankGrid = null;
         this.dataFlow = null;
@@ -41,10 +43,6 @@ class BrewGridStore extends EventEmitter {
     }
 
     // Actions / Emitters
-    // initializeGrid(assetGrid, tankGrid) {
-    //     this.assetGrid = assetGrid;
-    //     this.tankGrid = tankGrid;
-    // }
 
     changeData(data) {
         console.log(data)
@@ -62,6 +60,9 @@ class BrewGridStore extends EventEmitter {
     }
 
     toggleAsset(id) {
+        let state = ObjectScraper.scrape(this.assetStatus, "id", id);
+        state.status = state.status ? 0 : 1;
+        this.emit("change");
         // check asset status in this.assetStatus
         // toggle status
         // emit to server
@@ -73,8 +74,10 @@ class BrewGridStore extends EventEmitter {
         return this.brewAssets;
     }
 
-    getAssetStatus() {
-        return this.assetStatus;
+    getAssetStatus(id) {
+        const clone = Object.assign({}, this.assetStatus);
+        if(typeof id !== "undefined") return ObjectScraper.scrape(clone, "id", id);
+        return clone;
     }
 
     // getAssetGrid() {

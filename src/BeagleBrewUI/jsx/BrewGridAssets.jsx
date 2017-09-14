@@ -8,6 +8,7 @@ class BrewAssetSquare extends Component {
         if (this.props.assetData) {
             const assetData = this.props.assetData;
             let fluid = this.props.fluid;
+            let status = this.props.status;
             switch (this.props.assetData.assetId) {
                 case "t1":
                     asset = <BrewAssetDefaultTube fluid={fluid} data={assetData}/>;
@@ -37,12 +38,10 @@ class BrewAssetSquare extends Component {
                     asset = <BrewAssetCooler fluid={fluid} data={assetData}/>;
                     break;
                 case "pump":
-                    asset =
-                        <BrewAssetPump fluid={fluid} data={assetData}/>;
+                    asset = <BrewAssetPump status={status} fluid={fluid} data={assetData}/>;
                     break;
                 case "valv":
-                    asset =
-                        <BrewAssetValve fluid={fluid} data={assetData}/>;
+                    asset = <BrewAssetValve status={status} fluid={fluid} data={assetData}/>;
                     break;
                 case "show":
                     asset = <BrewAssetShower fluid={fluid} data={assetData}/>;
@@ -63,12 +62,13 @@ class BrewAssetSquare extends Component {
 class BrewAsset extends Component {
     getAssetStatusClass() {
         var status = this.isActive() ? " active" : "";
+
         var fluid = this.getFluidClass();
         return status + fluid;
     }
 
     isActive() {
-        return !!this.props.data.active;
+        return false;
     }
 
     getFluidClass() {
@@ -106,7 +106,7 @@ class BrewAssetClickable extends BrewAsset {
     constructor(props) {
         super(props);
         this.clickHandler = this.clickHandler.bind(this);
-        const prop = props.data.prop;
+        // const prop = props.data.prop;
         this.state = {
             data: props.data,
             active: false,
@@ -133,11 +133,11 @@ class BrewAssetClickable extends BrewAsset {
 }
 
 class BrewAssetToggle extends BrewAssetClickable {
+    isActive() {
+        return !!this.props.status.status;
+    }
     clickHandler() {
         var data = this.props.data;
-        // data.active = !data.active;
-        // BrewGridActions.changeData(data);
-
         BrewGridActions.toggleAsset(data.id);
     }
 }
@@ -209,17 +209,6 @@ class BrewAssetTConnectorTube extends BrewAsset {
 }
 
 class BrewAssetIntersectionTube extends BrewAsset {
-    // getFluidClass() {
-    //     var fluid = this.props.data.fluid ? " fluid" : "";
-    //     var fluidA = this.props.data.fluidA ? " fluid-a" : "";
-    //     var fluidB = this.props.data.fluidB ? " fluid-b" : "";
-    //     var liquid = "";
-    //     if (fluid + fluidA + fluidB != "") {
-    //         liquid = " liquid-" + this.props.data.liquid;
-    //     }
-    //     return fluid + fluidA + fluidB + liquid;
-    // }
-
     render() {
         const assetClass = "intersection-tube";
         const assetCode =
@@ -342,14 +331,6 @@ class BrewAssetCooler extends BrewAsset {
 }
 
 class BrewAssetPump extends BrewAssetToggle {
-
-    isActive() {
-        if (this.props.data.prop !== undefined)
-            return !!this.props.data.prop.status;
-        else
-            super.isActive();
-    }
-
     render() {
         const assetClass = "pump";
         const assetCode =
@@ -368,25 +349,6 @@ class BrewAssetPump extends BrewAssetToggle {
 }
 
 class BrewAssetValve extends BrewAssetToggle {
-
-    isActive() {
-        if (this.props.data.prop !== undefined)
-            return !!this.props.data.prop.status;
-        else
-            super.isActive();
-    }
-
-    // getFluidClass() {
-    //     var fluid = this.props.data.fluid ? " fluid" : "";
-    //     var fluidA = this.props.data.fluidA ? " fluid-a" : "";
-    //     var fluidB = this.props.data.fluidB ? " fluid-b" : "";
-    //     var liquid = "";
-    //     if (fluid + fluidA + fluidB != "") {
-    //         liquid = " liquid-" + this.props.data.liquid;
-    //     }
-    //     return fluid + fluidA + fluidB + liquid;
-    // }
-
     render() {
         const assetClass = "valve";
         const assetCode =

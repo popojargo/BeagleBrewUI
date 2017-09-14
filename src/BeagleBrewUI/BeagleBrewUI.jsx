@@ -10,6 +10,7 @@ import {
 import BrewGridInit from './js/BrewGridInit.js';
 import FluidSimulation from './js/FluidSimulation.js';
 import SocketCom from './js/SocketCom.js';
+import StatusGrid from './js/StatusGrid.js';
 
 // Flux
 import BrewGridStore from './stores/BrewGridStore';
@@ -24,7 +25,6 @@ class App extends Component {
         super();
         this.socketId = 'socketId';
         this.updateData = this.updateData.bind(this);
-        this.assetGrid = null;
     }
 
     componentWillMount() {
@@ -42,11 +42,13 @@ class App extends Component {
     initializeGrid() {
         const gridInit = new BrewGridInit(BrewGridStore.getBrewAssets());
         assetGrid = gridInit.getAssetGrid();
-        fluidSim = new FluidSimulation(assetGrid, gridInit.getTankGrid());
+        let statusGrid = StatusGrid.convert(assetGrid, BrewGridStore.getAssetStatus());
+        fluidSim = new FluidSimulation(assetGrid, gridInit.getTankGrid(), statusGrid);
         // BrewGridActions.initializeGrid(assetGrid);
         this.setState({
             fluidGrid: fluidSim.getFluidGrid(),
-            tankGrid: gridInit.getTankGrid()
+            tankGrid: gridInit.getTankGrid(),
+            statusGrid: statusGrid
         });
     }
 
@@ -57,15 +59,17 @@ class App extends Component {
     }
 
     updateData() {
-        fluidSim.simulateFluid();
+        let statusGrid = StatusGrid.convert(assetGrid, BrewGridStore.getAssetStatus());
+        fluidSim.simulateFluid(statusGrid);
         this.setState({
-            assetGrid: fluidSim.getAssetGrid()
+            fluidSim: fluidSim.getFluidGrid(),
+            statusGrid: statusGrid
         });
     }
 
     render() {
         return (
-            <BrewGrid fluidGrid={this.state.fluidGrid} tankGrid={this.state.tankGrid}/>
+            <BrewGrid statusGrid={this.state.statusGrid} fluidGrid={this.state.fluidGrid} tankGrid={this.state.tankGrid}/>
         );
     }
 }
@@ -138,7 +142,7 @@ class BrewGrid extends Component {
 
     render() {
         const rows = assetGrid.map((data, index) =>
-            <BrewGridRow fluidRow={this.props.fluidGrid[index]} rowData={data} row={index} key={index}/>
+            <BrewGridRow statusRow={this.props.statusGrid[index]} fluidRow={this.props.fluidGrid[index]} rowData={data} row={index} key={index}/>
         );
         const tankGrid = this.props.tankGrid;
         const tanks = tankGrid.map((data, index) =>
@@ -170,7 +174,7 @@ class BrewGridRow extends Component {
     render() {
         const rows = this.props.rowData;
         const squares = rows.map((data, index) =>
-            <BrewAssetSquare fluid={this.props.fluidRow[index]} assetData={data} key={index}/>
+            <BrewAssetSquare status={this.props.statusRow[index]} fluid={this.props.fluidRow[index]} assetData={data} key={index}/>
         );
 
         return (

@@ -1,15 +1,17 @@
+import ArrayScraper from './ArrayScraper';
+
 class FluidSimulation {
-    constructor(assetGrid, tankGrid) {
+    constructor(assetGrid, tankGrid, statusGrid) {
         this.assetGrid = assetGrid;
         this.tankGrid = tankGrid;
+        this.statusGrid = statusGrid;
         this.fluidGrid = [];
         this.starts = [];
         this.ends = [];
 
-
         this.initializeGrid();
         this.findStartsEnds();
-        this.simulateFluid();
+        this.simulateFluid(statusGrid);
     }
     initializeGrid() {
         for(const gridRow of this.assetGrid) {
@@ -37,13 +39,10 @@ class FluidSimulation {
     getFluidGrid() {
         return this.fluidGrid;
     }
-    getAssetGrid() {
-        return this.assetGrid;
-    }
     /* Adds the starts and ends of fluids */
     findStartsEnds() {
         // Find I/O in grid assets
-        this.arrayScan(this.assetGrid, (asset, i) => {
+        ArrayScraper.scrape(this.assetGrid, (asset, i) => {
             if(asset === null) return;
             var elem = {
                 x: i[1] + 1,
@@ -64,7 +63,7 @@ class FluidSimulation {
             }
         });
 
-        this.arrayScan(this.tankGrid, (tank) => {
+        ArrayScraper.scrape(this.tankGrid, (tank) => {
             for(const output of tank.outputs) {
                 var testY = output.y - tank.y - 1;
                 var testX = output.x - tank.x - 1;
@@ -104,7 +103,8 @@ class FluidSimulation {
         }
     }
     /* Starts fluid simulation in open ports */
-    simulateFluid() {
+    simulateFluid(statusGrid) {
+        this.statusGrid = statusGrid;
         this.removeFluid();
         for(const startPoint of this.starts) {
             if(startPoint.open) {
@@ -115,7 +115,7 @@ class FluidSimulation {
     }
     /* Removes fluid off the system */
     removeFluid() {
-        this.arrayScan(this.fluidGrid, (asset) => {
+        ArrayScraper.scrape(this.fluidGrid, (asset) => {
             if(asset === null) return;
             asset.fluid = false;
             asset.fluidA = asset.fluidA ? false : null;
@@ -127,6 +127,7 @@ class FluidSimulation {
     addFluid(fluid) {
         var asset = this.assetGrid[fluid.y][fluid.x];
         var assetFluid = this.fluidGrid[fluid.y][fluid.x];
+        var assetStatus = this.statusGrid[fluid.y][fluid.x];
         const point = {
             x: fluid.x,
             y: fluid.y
@@ -206,7 +207,7 @@ class FluidSimulation {
             case "valv":
                 // Valve
                 // straight
-                if(asset.active) {
+                if(!!assetStatus.status) {
                     fluid.moveUp();
                     if(assetFluid.fluid) {
                         // TODO: don't cross the streams!
@@ -248,19 +249,6 @@ class FluidSimulation {
             }
         }
         return false;
-    }
-    /* Applies the parameter function to the bottom children of the array */
-    arrayScan(arr, f, indexes) {
-        let prevIndex = typeof indexes !== "undefined" ? indexes.slice(0) : [];
-        arr.forEach((elem, i) => {
-            let newIndex = prevIndex.slice(0);
-            newIndex.push(i);
-            if(Array.isArray(elem)) {
-                this.arrayScan(elem, f, newIndex);
-            } else {
-                f(elem, newIndex);
-            }
-        })
     }
 }
 
