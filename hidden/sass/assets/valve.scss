@@ -7,8 +7,7 @@
         transform-origin: 50%;
     }
 
-    &.status-1,
-    &.status-2 {
+    &.active {
         .valve-icon {
             transform: rotateZ(90deg);
         }

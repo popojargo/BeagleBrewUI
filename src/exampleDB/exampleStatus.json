@@ -1,0 +1,51 @@
+{
+    "Pumps": [{
+        "status": 0,
+        "id": "Pompe1"
+    }, {
+        "status": 0,
+        "id": "Pompe2"
+    }],
+    "ForceInit": true,
+    "Tanks": [{
+        "controllerStatus": 0,
+        "sensorStatus": 1,
+        "id": "Cuve1",
+        "currentTemp": 50.1,
+        "setTemp": 0
+    }, {
+        "controllerStatus": 0,
+        "sensorStatus": 1,
+        "id": "Cuve2",
+        "currentTemp": 40,
+        "setTemp": 0
+    }, {
+        "controllerStatus": 0,
+        "sensorStatus": 1,
+        "id": "Cuve2",
+        "currentTemp": 40,
+        "setTemp": 0
+    }],
+    "Valves": [{
+        "status": 0,
+        "id": "Valve1"
+    }, {
+        "status": 0,
+        "id": "Valve2"
+    }, {
+        "status": 0,
+        "id": "Valve3"
+    }, {
+        "status": 0,
+        "id": "Valve4"
+    }, {
+        "status": 0,
+        "id": "Valve5"
+    }, {
+        "status": 0,
+        "id": "Valve6"
+    },{
+        "status": 0,
+        "id": "Valve7"
+    }]
+}

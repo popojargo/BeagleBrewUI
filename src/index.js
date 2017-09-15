@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import BeagleBrewUI from './BeagleBrewUI/BeagleBrewUI';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<BeagleBrewUI />, document.getElementById('root'));
 registerServiceWorker();

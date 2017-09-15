@@ -1,6 +1,6 @@
 {
     "capacité": "L",
-    "température": "°C",
+    "currentTemp": "°C",
     "niveau": "L",
     "densité": "%",
     "acidité": "pH"
