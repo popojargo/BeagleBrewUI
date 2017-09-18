@@ -9,7 +9,6 @@ import {
 // Brew Grid logic
 import BrewGridInit from './js/BrewGridInit.js';
 import FluidSimulation from './js/FluidSimulation.js';
-import SocketCom from './js/SocketCom.js';
 
 // Flux
 import BrewGridStore from './stores/BrewGridStore';
@@ -28,13 +27,6 @@ class App extends Component {
 
     componentWillMount() {
         BrewGridStore.on("change", this.updateData);
-
-        //Create socket if not already created
-        if (!this.socket)
-            this.socket = new SocketCom();
-
-        //Add a subscription to get all the states
-        this.socket.addStateChangeSub(this.socketId, BrewGridActions.changeStates);
         this.initializeGrid();
     }
 
@@ -49,8 +41,6 @@ class App extends Component {
     }
 
     componentWillUnmount() {
-        //Remove subscriptions to states
-        this.socket.removeStateChangeSub(this.socketId);
         BrewGridStore.removeListener("change", this.updateData);
     }
 

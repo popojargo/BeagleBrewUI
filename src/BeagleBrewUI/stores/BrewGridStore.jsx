@@ -2,15 +2,29 @@ import {EventEmitter} from "events";
 import dispatcher from '../../dispatcher';
 import * as CST from '../js/constants';
 import Converter from '../js/converter';
+import SocketCom from '../js/SocketCom.js';
 
 var brewAssets = require('../../exampleDB/gridLayout.json');
 
 class BrewGridStore extends EventEmitter {
     constructor() {
         super();
+        this.socketId = "socketId";
         this.brewAssets = brewAssets;
         this.assetMap = this.initAssetMap();
+        //Create socket if not already created
+        this.socket = new SocketCom();
 
+        //Add a subscription to get all the states
+        let dis = this;
+        this.socket.addStateChangeSub(this.socketId, function (data) {
+            debugger;
+            if (data.ForceInit)
+                dis.forceChangeStates(data);
+            else
+                dis.changeStates(data);
+            dis.emit("change");
+        });
         this.assetGrid = null;
         this.tankGrid = null;
         this.dataFlow = null;
@@ -47,6 +61,7 @@ class BrewGridStore extends EventEmitter {
     }
 
     changeData(data) {
+
         this.brewAssets[data.y - 1][data.x - 1] = data;
         this.emit("change");
     }
@@ -107,16 +122,18 @@ class BrewGridStore extends EventEmitter {
                     this.updateById(elem.id, elem);
                 }
             }
+        this.emit("change");
     }
 
     forceChangeStates(states) {
+        debugger;
         for (let apiType in states) {
             if (states.hasOwnProperty(apiType)) {
                 //An array of entities of type "apiType"
                 let apiEntities = states[apiType];
                 let converter = new Converter();
                 let appType = converter.typeToApp(apiType);
-                if (!this.assetMap[apiType])
+                if (!this.assetMap[appType])
                     continue;
                 let appTypeIds = Object.keys(this.assetMap[appType]);
                 let newMapping = {};
@@ -131,13 +148,14 @@ class BrewGridStore extends EventEmitter {
                 }
                 this.assetMap[appType] = newMapping;
             }
+            debugger;
         }
+        this.emit("change");
     }
 
 
     // Handlers
     handleActions(action) {
-        debugger;
         switch (action.type) {
             case CST.INIT_GRID:
                 this.initializeGrid(action.assetGrid, action.tankGrid);
@@ -158,12 +176,17 @@ class BrewGridStore extends EventEmitter {
             case CST.TOGGLE_FLUID:
                 this.toggleFluid(action.affectedAssetsData);
                 break;
-            case CST.CHANGE_STATES:
+
+            case CST.CHANGE_VALVE:
                 debugger;
-                if (action.data.ForceInit)
-                    this.forceChangeStates(action.data);
-                else
-                    this.changeStates(action.data);
+                let newValveStatus = !action.data.prop.status;
+                this.socket.updateValve(action.data.id, newValveStatus);
+                this.emit("change");
+                break;
+            case CST.CHANGE_PUMP:
+                debugger;
+                let newPumpStatus = !action.data.prop.status;
+                this.socket.updatePump(action.data.id, newPumpStatus);
                 this.emit("change");
                 break;
             default:

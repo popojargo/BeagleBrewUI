@@ -197,7 +197,7 @@ class BrewAssetTank extends BrewAssetClickable {
 
         var assetCode =
             <div className="tank" style={{width: width, height: height, left: x, top: y}}>
-                <span className="fluid">{this.props.data.prop.currentTemp}</span>
+                <span className="fluid"></span>
             </div>;
 
         return super.render(assetCode, assetClass, false);
@@ -400,6 +400,10 @@ class BrewAssetCooler extends BrewAsset {
 }
 
 class BrewAssetPump extends BrewAssetToggle {
+    clickHandler() {
+        let data = this.props.data;
+        BrewGridActions.changeData(data);
+    }
 
     isActive() {
         if (this.props.data.prop !== undefined)
@@ -426,6 +430,10 @@ class BrewAssetPump extends BrewAssetToggle {
 }
 
 class BrewAssetValve extends BrewAssetToggle {
+    clickHandler() {
+        let data = this.props.data;
+        BrewGridActions.changeValve(data);
+    }
 
     isActive() {
         if (this.props.data.prop !== undefined)

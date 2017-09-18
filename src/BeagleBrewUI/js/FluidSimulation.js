@@ -75,6 +75,7 @@ class FluidSimulation {
     }
     /* Starts fluid simulation in open ports */
     simulateFluid() {
+        debugger;
         this.removeFluid();
         for(const startPoint of this.starts) {
             // if(startPoint.open) {

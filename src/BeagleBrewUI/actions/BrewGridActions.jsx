@@ -50,3 +50,20 @@ export function changeStates(data) {
     })
 }
 
+//API Stuff
+
+
+export function changeValve(data) {
+    dispatcher.dispatch({
+        type: CST.CHANGE_VALVE,
+        data
+    });
+}
+
+export function changePump(data) {
+    dispatcher.dispatch({
+        type: CST.CHANGE_PUMP,
+        data
+    })
+}
+

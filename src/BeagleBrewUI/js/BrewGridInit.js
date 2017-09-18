@@ -41,10 +41,10 @@ class BrewGridInit {
         }
     }
     addTank(tank) {
-        for(var i = 0; i < tank.inputs.length; i++) {
+        for(let i = 0; i < tank.inputs.length; i++) {
             this.placeInputOutput(tank.inputs[i], tank.x, tank.y);
         }
-        for(i = 0; i < tank.outputs.length; i++) {
+        for(let i = 0; i < tank.outputs.length; i++) {
             this.placeInputOutput(tank.outputs[i], tank.x, tank.y);
         }
 
