@@ -1,0 +1,7 @@
+{
+    "capacity": "L",
+    "temperature": "°C",
+    "level": "L",
+    "density": "%",
+    "acidity": "pH"
+}
