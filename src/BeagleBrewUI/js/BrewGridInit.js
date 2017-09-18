@@ -1,29 +1,73 @@
-// import * as BrewGridActions from '../actions/BrewGridActions';
-
+/*
+ * Creates a grid with all the brew assets
+ */
 class BrewGridInit {
     constructor(brewAssets) {
         this.assetGrid = [];
-        this.tankGrid = [];
+        this.tanks = [];
         this.brewAssets = brewAssets;
         this.initializeGrid();
     }
+    // Getters
     getAssetGrid() {
         return this.assetGrid.slice(0);
     }
-    getTankGrid() {
-        return this.tankGrid.slice(0);
+    getTanks() {
+        console.log(this.tanks)
+        return this.tanks.slice(0);
     }
-    initializeGrid() {
-        // TODO: find the highest X and Y of brewAssets to build the assetGrid
 
-        for(let i = 0; i < 14; i++) {
-            let gridRow = [];
-            for(let j = 0; j < 19; j++) {
-                gridRow.push(null);
-            }
-            this.assetGrid.push(gridRow);
+    /**
+     * Changes the asset at the specified position in the grid
+     * @param {int}    x     Position on the x axis
+     * @param {int}    y     Position on the y axis
+     * @param {Object} asset Asset to be added
+     */
+    changeAssetGridAt(x, y, asset) {
+        this.redimensionGrid(x + 1, y + 1);
+        this.assetGrid[y][x] = asset;
+    }
+
+    /**
+     * Redimensions the grid
+     * @param {int} width  Width wanted
+     * @param {int} height height wanted
+     */
+    redimensionGrid(width, height) {
+        const gridHeight = this.assetGrid.length;
+        if(gridHeight < height) this.addGridRow(height);
+
+        const gridWidth = this.assetGrid[0].length;
+        if(gridWidth < width) this.addGridCol(width);
+    }
+
+    /**
+     * Adds rows the the grid until specified number of row
+     * @param {int} nbRow Number of rows wanted
+     */
+    addGridRow(nbRow) {
+        while(this.assetGrid.length < nbRow) {
+            this.assetGrid.push([]);
         }
+        this.addGridCol(this.assetGrid[0].length);
+    }
 
+    /**
+     * Adds columns the the grid until specified number of columns
+     * @param {int} nbCol Number of columns wanted
+     */
+    addGridCol(nbCol) {
+        for(let row of this.assetGrid) {
+            while(row.length < nbCol) {
+                row.push(null);
+            }
+        }
+    }
+
+    /**
+     * Starts the creation of the grid
+     */
+    initializeGrid() {
         const tanks = this.filterAsset("tank");
         for(const tank of tanks) {
             this.addTank(tank);
@@ -41,6 +85,11 @@ class BrewGridInit {
 
         this.cleanupData();
     }
+
+    /**
+     * Adds a new tank to the tank grid
+     * @param {Object} tank The tank to be added
+     */
     addTank(tank) {
         let i;
         for(i = 0; i < tank.inputs.length; i++) {
@@ -54,8 +103,14 @@ class BrewGridInit {
         tank.x--;
         tank.y--;
         tank.assetId = "tank";
-        this.tankGrid.push(tank);
+        this.tanks.push(tank);
     }
+    /**
+     * Places a placeholder tube connected to the tank
+     * @param  {Object} data Data of the input
+     * @param  {int}    x    Tank x position
+     * @param  {int}    y    Tank y position
+     */
     placeInputOutput(data, x, y) {
         var tubeY = data.y;
         var tubeX = data.x;
@@ -72,8 +127,6 @@ class BrewGridInit {
                     // Y top or middle
                     if(tubeY < y) {
                         rotation = 270;
-                    } else {
-                        return;
                     }
                 } else {
                     rotation = 90;
@@ -81,12 +134,18 @@ class BrewGridInit {
             }
         }
 
-        var gridData = {};
-        gridData.assetId = "t1";
-        gridData.rotation = rotation;
-        gridData.posTubing = -1;
-        this.assetGrid[tubeY-1][tubeX-1] = gridData;
+        var assetData = {
+            assetId: "t1",
+            rotation: rotation,
+            posTubing: -1
+        };
+        this.changeAssetGridAt(tubeX - 1, tubeY - 1, assetData);
     }
+
+    /**
+     * Places tubes on the specified path
+     * @param  {Array} tubePath Pathing of a tube
+     */
     placeTube(tubePath) {
         for(var i = 1; i < tubePath.length; i++) {
             var yDelta = tubePath[i].y - tubePath[i-1].y;
@@ -120,75 +179,97 @@ class BrewGridInit {
             }
         }
     }
+
+    /**
+     * Adds a tube piece at the specified position
+     * Will modify the tube type if there is a tube existing in the position
+     * @param {int}     y          Position on the y axis
+     * @param {int}     x          Position on the x axis
+     * @param {int}     posDir     Direction of the tube
+     * @param {Boolean} isVertical Is the tube vertical
+     * @param {int}     posTubing  Is the tube at the end of its path
+     */
     addTubePiece(y, x, posDir, isVertical, posTubing) {
         y--;
         x--;
-        var data = {};
-        data.assetId = "t1";
-        data.posTubing = posTubing;
-        data.rotation = isVertical ? 90 : 0;
-        data.rotation += 180 * (1 - posDir) / 2;
-        data.rotation %= 360;
+        var asset = {};
+        asset.assetId = "t1";
+        asset.posTubing = posTubing;
+        asset.rotation = isVertical ? 90 : 0;
+        asset.rotation += 180 * (1 - posDir) / 2;
+        asset.rotation %= 360;
+
+        this.redimensionGrid(x + 1, y + 1);
         if(this.assetGrid[y][x] != null) {
             var gridData = this.assetGrid[y][x];
             switch(gridData.assetId) {
                 // Default
                 case "t1":
-                // set tconnector
-                data.assetId = "t3";
-                var modRotation = data.rotation + 180 * (1 - posTubing) / 2;
-                modRotation %= 360;
-                data.rotation = 90 + modRotation;
-                data.rotation %= 360;
-                if(posTubing) {
-                    if(gridData.posTubing) {
-                        // curved
-                        data.assetId = "t2"
-                        switch(gridData.rotation + modRotation) {
-                            case 270:
-                            data.rotation = gridData.rotation * modRotation ? 180 : 0;
-                            break;
-                            case 90:
-                            data.rotation = 90;
-                            break;
-                            case 450:
-                            data.rotation = 270;
-                            break;
-                            default:
-                            data.rotation = 0;
-                            data.assetId = "t1";
+                    // set tconnector
+                    asset.assetId = "t3";
+                    var modRotation = asset.rotation + 180 * (1 - posTubing) / 2;
+                    modRotation %= 360;
+                    asset.rotation = 90 + modRotation;
+                    asset.rotation %= 360;
+                    if(posTubing) {
+                        if(gridData.posTubing) {
+                            // curved
+                            asset.assetId = "t2"
+                            switch(gridData.rotation + modRotation) {
+                                case 270:
+                                asset.rotation = gridData.rotation * modRotation ? 180 : 0;
+                                break;
+                                case 90:
+                                asset.rotation = 90;
+                                break;
+                                case 450:
+                                asset.rotation = 270;
+                                break;
+                                default:
+                                asset.rotation = 0;
+                                asset.assetId = "t1";
+                            }
+                        }
+                    } else {
+                        if(!gridData.posTubing) {
+                            asset.assetId = "t4";
+                            asset.rotation = 0;
                         }
                     }
-                } else {
-                    if(!gridData.posTubing) {
-                        data.assetId = "t4";
-                        data.rotation = 0;
-                    }
-                }
-                break;
+                    break;
                 // Curved
                 case "t2":
-                break;
+                    break;
                 default:
-                console.log(gridData.assetId);
+                    console.log(gridData.assetId);
             }
-            data.posTubing = 0;
+            asset.posTubing = 0;
         }
-        data.x = x + 1;
-        data.y = y + 1;
-        this.assetGrid[y][x] = data;
+        asset.x = x + 1;
+        asset.y = y + 1;
+        this.changeAssetGridAt(x, y, asset);
     }
+
+    /**
+     * Adds a miscellenous asset to the grid
+     * @param {Object} misc Misc data
+     */
     addMiscAsset(misc) {
         var x = misc.x - 1;
         var y = misc.y - 1;
+        this.redimensionGrid(x + 1, y + 1);
         if(this.assetGrid[y][x] === null) {
-            var data = {};
-            data.rotation = 0;
-            this.assetGrid[y][x] = data;
+            var asset = {};
+            asset.rotation = 0;
+            this.changeAssetGridAt(x, y, asset);
         }
         misc = Object.assign({}, this.assetGrid[y][x], misc);
-        this.assetGrid[y][x] = misc;
+        this.changeAssetGridAt(x, y, misc);
     }
+
+    /**
+     * Cleans up the data of its useless information
+     */
     cleanupData() {
         let cleanGrid = [];
         for(const row of this.assetGrid) {
@@ -211,17 +292,12 @@ class BrewGridInit {
         }
         this.assetGrid = cleanGrid;
     }
-    sortNumbers(a, b) {
-        return a - b;
-    }
-    getArrayElements(arr, isEven) {
-        var a = [];
-        var x = isEven ? 1 : 0;
-        for(var i = x; i < arr.length; i+=2) {
-            a.push(parseInt(arr[i], 10));
-        }
-        return a;
-    }
+
+    /**
+     * Returns the assets with the specified type
+     * @param  {String} type Asset type
+     * @return {Array}  Array of the specified type of asset
+     */
 	filterAsset(type) {
 		return this.brewAssets.filter(obj => obj.type === type);
 	}

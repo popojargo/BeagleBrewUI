@@ -4,54 +4,76 @@
 @import "beagleBrewControlPanel";
 
 div.beagleBrewGrid {
-    transform: scale(1);
-    transition: transform 500ms;
     background: #22313F;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    &>div.beagleBrewGrid-container {
+        transform: scale(1);
+        transition: transform 500ms;
+        width: 700px;
 
-    .clickable {
-        cursor: pointer;
-    }
+        .clickable {
+            cursor: pointer;
+        }
 
-    &>div.beagleBrewGrid-tanks {
-        position: absolute;
-        width: 950px;
-        height: 700px;
-    }
+        div.beagleBrewGrid-assets {
+            width: 100%;
+            position: relative;
+            &>div.beagleBrewGrid-row {
+                width: 100%;
+                display: flex;
+                div.beagleBrewGrid-square {
+                    flex-grow: 1;
 
-    div.beagleBrewGrid-row {
-        display: flex;
-        div.beagleBrewGrid-square {
-            // width: calc(100vh/14);
-            // height: calc(100vh/14);
-            width: 50px;
-            height: 50px;
+                    &::after {
+                        content: "";
+                        display: block;
+                        padding-bottom: 100%;
+                    }
 
-            :not(.clickable) {
-                pointer-events: none;
-            }
-            .clickable {
-                &:hover::after {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    box-sizing: border-box;
-                    border: 1px dashed #ecf031;
+                    :not(.clickable) {
+                        pointer-events: none;
+                    }
+                    .clickable {
+                        &:hover::after {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            box-sizing: border-box;
+                            border: 1px dashed #ecf031;
+                        }
+                    }
                 }
             }
         }
     }
+    div.openControlPanel {
+
+        div.beagleBrewGrid-container {
+            transform: scale(2);
+        }
+    }
 }
 
-div.openControlPanel {
+@media (min-width: 768px) {
+    div.beagleBrewGrid > div.beagleBrewGrid-container {
+        width: 850px;
+    }
+}
 
-    div.beagleBrewGrid {
-        transform: scale(2);
+@media (min-width: 900px) {
+    div.beagleBrewGrid > div.beagleBrewGrid-container {
+        width: 950px;
+    }
+}
+
+@media (min-width: 1200px) {
+    div.beagleBrewGrid > div.beagleBrewGrid-container {
+        width: 1100px;
     }
 }

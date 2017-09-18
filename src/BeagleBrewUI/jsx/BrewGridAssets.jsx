@@ -143,34 +143,28 @@ class BrewAssetToggle extends BrewAssetClickable {
 }
 
 class BrewAssetTank extends BrewAssetClickable {
-    tick() {
-        var testData = this.props.data;
-        var delta = Math.floor(Math.random() * 10);
-        testData.prop["currentTemp"] += Math.random() >= 0.5 ? delta : -delta;
-        this.setState({
-            data: testData
-        });
-        if (this.state.flowingData) {
-            BrewGridActions.flowData(this.state.data);
-        }
-    }
     getAssetStatusClass() {
         return "";
     }
     render() {
         const assetClass = "tank";
+        var grid = this.props.grid;
         var data = this.props.data;
-        const width = (data.width * 50) + "px";
-        const height = (data.height * 50) + "px";
-        const x = (data.x * 50 - 5) + "px";
-        const y = (data.y * 50 - 5) + "px";
+        const width = 100 / grid.width * data.width;
+        const height = 100 / grid.height * data.height;
+        const x = "calc((100%/" + grid.width + "*" + data.x + ") - 5px)";
+        const y = "calc((100%/" + grid.height + "*" + data.y + ") - 5px)";
 
         var assetCode =
-            <div className="tank" style={{width: width, height: height, left: x, top: y}}>
-                <span className="fluid">{this.props.data.prop.currentTemp}</span>
+            <div className="tank">
+                <span className="fluid" data-temp={this.props.data.prop.currentTemp}></span>
             </div>;
 
-        return super.render(assetCode, assetClass, false);
+        return (
+            <div className={this.getClass(assetClass, false)} onClick={this.clickHandler} style={{width: width + "%", height: height + "%", left: x, top: y}}>
+                {assetCode}
+            </div>
+        );
     }
 }
 
@@ -353,17 +347,17 @@ class BrewAssetValve extends BrewAssetToggle {
         const assetClass = "valve";
         const assetCode =
             <div>
+                <svg viewBox="0 0 50 50">
+                    <line className="tube-a tube" y1="25" x2="10" y2="25"/>
+                    <line className="tube-b tube" x1="40" y1="25" x2="50" y2="25"/>
+                </svg>
                 <svg viewBox="0 0 50 50" className="valve-icon">
                     <g>
                         <circle cx="25" cy="25" r="15"/>
                         <path d="M31.27,21.46a5,5,0,0,1,0,7.07"/>
                         <path d="M18.73,28.54a5,5,0,0,1,0-7.07"/>
                     </g>
-                    <line className="tube-c tube" x1="25" y1="10" x2="25" y2="40"/>
-                </svg>
-                <svg viewBox="0 0 50 50">
-                    <line className="tube-a tube" y1="25" x2="10" y2="25"/>
-                    <line className="tube-b tube" x1="40" y1="25" x2="50" y2="25"/>
+                    <line className="tube-c tube" x1="25" y1="8.5" x2="25" y2="41.5"/>
                 </svg>
             </div>;
         return super.render(assetCode, assetClass, true);

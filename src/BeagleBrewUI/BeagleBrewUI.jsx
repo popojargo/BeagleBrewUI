@@ -19,6 +19,7 @@ import * as BrewGridActions from './actions/BrewGridActions';
 // Fluid simulation
 var fluidSim;
 var assetGrid;
+var tanks;
 
 class App extends Component {
     constructor() {
@@ -34,15 +35,17 @@ class App extends Component {
         BrewGridStore.socket.addStateChangeSub(this.socketId, BrewGridActions.changeStates);
     }
 
+    /**
+     * Initialize the grid and adds it to the state
+     */
     initializeGrid() {
         const gridInit = new BrewGridInit(BrewGridStore.getBrewAssets());
         assetGrid = gridInit.getAssetGrid();
+        tanks = gridInit.getTanks();
         let statusGrid = StatusGrid.convert(assetGrid, BrewGridStore.getAssetStatus());
-        fluidSim = new FluidSimulation(assetGrid, gridInit.getTankGrid(), statusGrid);
-        // BrewGridActions.initializeGrid(assetGrid);
+        fluidSim = new FluidSimulation(assetGrid, tanks, statusGrid);
         this.setState({
             fluidGrid: fluidSim.getFluidGrid(),
-            tankGrid: gridInit.getTankGrid(),
             statusGrid: statusGrid
         });
     }
@@ -64,8 +67,7 @@ class App extends Component {
 
     render() {
         return (
-            <BrewGrid statusGrid={this.state.statusGrid} fluidGrid={this.state.fluidGrid}
-                      tankGrid={this.state.tankGrid}/>
+            <BrewGrid statusGrid={this.state.statusGrid} fluidGrid={this.state.fluidGrid} />
         );
     }
 }
@@ -74,13 +76,8 @@ class BrewGrid extends Component {
     constructor(props) {
         super(props);
         this.toggleCP = this.toggleCP.bind(this);
-        this.updateWindowSize = this.updateWindowSize.bind(this);
         this.state = {
-            showCP: false,
-            winWidth: 0,
-            winHeight: 0,
-            zoomX: 0,
-            zoomY: 0
+            showCP: false
         };
     }
 
@@ -89,39 +86,10 @@ class BrewGrid extends Component {
         this.setState((prevState) => ({
             showCP: !prevState.showCP
         }));
-        if (asset !== null) {
-            this.setState({
-                zoomX: asset.x,
-                zoomY: asset.y
-            });
-        }
-    }
-
-    zoomTo() {
-        var nbRow = assetGrid.length;
-        var nbCol = assetGrid[0].length;
-        var zoomX = this.state.zoomX;
-        var zoomY = this.state.zoomY;
-        var originY = 100 * (zoomY - 1 + 0.5) / nbRow;
-        var originX = 100 * (zoomX - 1 + 0.5) / nbCol;
-        var origin = originX + "% " + originY + "%";
-
-        var cpWidth = this.state.winWidth / 3;
-        cpWidth = cpWidth < 500 ? cpWidth : 500;
-        cpWidth = cpWidth > 300 ? cpWidth : 300;
-        var zoomingWidth = this.state.winWidth - cpWidth;
-        // (window.innerWidth - ( rect.width * scale ) ) / 2;
-        return origin;
-
     }
 
     componentWillMount() {
         BrewGridStore.on("Toggle Control Panel", this.toggleCP);
-    }
-
-    componentDidMount() {
-        this.updateWindowSize();
-        window.addEventListener('resize', this.updateWindowSize);
     }
 
     componentWillUnmount() {
@@ -129,33 +97,27 @@ class BrewGrid extends Component {
         BrewGridStore.removeListener("Toggle Control Panel", this.toggleCP);
     }
 
-    updateWindowSize() {
-        this.setState({
-            winWidth: window.innerWidth,
-            winHeight: window.innerHeight
-        });
-    }
-
     render() {
         const rows = assetGrid.map((data, index) =>
             <BrewGridRow statusRow={this.props.statusGrid[index]} fluidRow={this.props.fluidGrid[index]} rowData={data}
                          row={index} key={index}/>
         );
-        const tankGrid = this.props.tankGrid;
-        const tanks = tankGrid.map((data, index) =>
-            <BrewAssetTank data={data} key={index}/>
+        const tankGrid = tanks;
+        const gridDimensions = {
+            width: assetGrid[0].length,
+            height: assetGrid.length
+        };
+        const tanksComponents = tankGrid.map((data, index) =>
+            <BrewAssetTank grid={gridDimensions} data={data} key={index}/>
         );
 
-        var origin = this.zoomTo();
         var toggleCPClass = this.state.showCP ? "openControlPanel" : "";
 
         return (
-            <div className={toggleCPClass}>
-                <div className="beagleBrewGrid" style={{transformOrigin: origin}}>
-                    <div className="beagleBrewGrid-tanks">
-                        {tanks}
-                    </div>
+            <div className={"beagleBrewGrid " + toggleCPClass}>
+                <div className="beagleBrewGrid-container">
                     <div className="beagleBrewGrid-assets">
+                        {tanksComponents}
                         {rows}
                     </div>
                 </div>

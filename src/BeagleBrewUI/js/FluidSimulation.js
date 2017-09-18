@@ -13,6 +13,15 @@ class FluidSimulation {
         this.findStartsEnds();
         this.simulateFluid(statusGrid);
     }
+
+    // Getter
+    getFluidGrid() {
+        return this.fluidGrid;
+    }
+
+    /**
+     * Creates a placeholder grid with the assetGrid dimensions
+     */
     initializeGrid() {
         for(const gridRow of this.assetGrid) {
             let row = [];
@@ -36,10 +45,10 @@ class FluidSimulation {
             this.fluidGrid.push(row);
         }
     }
-    getFluidGrid() {
-        return this.fluidGrid;
-    }
-    /* Adds the starts and ends of fluids */
+
+    /**
+     * Finds the starts and ends of the tubes
+     */
     findStartsEnds() {
         // Find I/O in grid assets
         ArrayScraper.scrape(this.assetGrid, (asset, i) => {
@@ -102,7 +111,11 @@ class FluidSimulation {
             pos.y--;
         }
     }
-    /* Starts fluid simulation in open ports */
+
+    /**
+     * Starts the simulation of the fluid
+     * @param  {Array} statusGrid Grid containing the states of the misc
+     */
     simulateFluid(statusGrid) {
         this.statusGrid = statusGrid;
         this.removeFluid();
@@ -113,7 +126,10 @@ class FluidSimulation {
             }
         }
     }
-    /* Removes fluid off the system */
+
+    /**
+     * Empties the fluid inside the system
+     */
     removeFluid() {
         ArrayScraper.scrape(this.fluidGrid, (asset) => {
             if(asset === null) return;
@@ -123,7 +139,11 @@ class FluidSimulation {
             asset.fluidC = asset.fluidC ? false : null;
         });
     }
-    /* Adds fluid to point */
+
+    /**
+     * Adds specified fluid in the system
+     * @param {Fluid} fluid The fluid to be added
+     */
     addFluid(fluid) {
         var asset = this.assetGrid[fluid.y][fluid.x];
         var assetFluid = this.fluidGrid[fluid.y][fluid.x];
@@ -132,7 +152,6 @@ class FluidSimulation {
             x: fluid.x,
             y: fluid.y
         };
-        // console.log(point)
         var fluidState = true;
         switch(asset.assetId) {
             case "t2":
@@ -241,7 +260,12 @@ class FluidSimulation {
         this.addFluid(fluid);
         // this.assetGrid[point.y][point.x] = asset;
     }
-    /* Returns true if there is an end at specified point */
+
+    /**
+     * Returns if the specified point is an ending
+     * @param  {Object} point The position to be checked
+     * @return {Boolean}      True if position is an ending
+     */
     checkEnding(point) {
         for(const end of this.ends) {
             if(point.x === end.x && point.y === end.y) {
@@ -266,20 +290,38 @@ class Fluid {
         this.moveRight = this.moveRight.bind(this);
         this.moveUp = this.moveUp.bind(this);
     }
+
+    /**
+     * Moves the fluid to its left
+     */
     moveLeft() {
         const newPoint = this.getNewPoint(this.left);
         this.moveTo(newPoint);
         this.direction = this.left;
     }
+
+    /**
+     * Moves the fluid to its right
+     */
     moveRight() {
         const newPoint = this.getNewPoint(this.right);
         this.moveTo(newPoint);
         this.direction = this.right;
     }
+
+    /**
+     * Moves the fluid to its front
+     */
     moveUp() {
         const newPoint = this.getNewPoint(this.direction);
         this.moveTo(newPoint);
     }
+
+    /**
+     * Returns the new position of the fluid following the specified direction
+     * @param  {int}    newDirection    Angle of the direction in CW degrees (0 is right)
+     * @return {Object}                 Returns the new position of the fluid
+     */
     getNewPoint(newDirection) {
         /*
             Ex. direction : 270 (Going up, expected: y--)
@@ -287,7 +329,7 @@ class Fluid {
             (270/90) = 3 | 3 - (1 + 1) = 1 | 1 * -1 = -1
             ==> y += -1 ==> y--
         */
-        var point = {
+        let point = {
             x: this.x,
             y: this.y
         }
@@ -300,16 +342,30 @@ class Fluid {
         }
         return point;
     }
+
+    /**
+     * Sets the fluid position to the specified point
+     * @param  {Object} point The new position
+     */
     moveTo(point) {
         this.x = point.x;
         this.y = point.y;
         this.updateFluid();
     }
+
+    /**
+     * Updates the fluid surrounding directions
+     */
     updateFluid() {
         const newDirection = new Direction(this.direction);
         this.left = newDirection.left();
         this.right = newDirection.right();
     }
+
+    /**
+     * Returns a copy of the current fluid
+     * @return {Fluid} The new copy of the fluid
+     */
     split() {
         const currentPoint = {
             x: this.x,
@@ -321,18 +377,25 @@ class Fluid {
     }
 }
 
-
-
-
 class Direction {
     constructor(rotation) {
         this.rotation = rotation;
         this.left = this.left.bind(this);
         this.right = this.right.bind(this);
     }
+
+    /**
+     * Returns the angle 90 degrees to the left of its rotation
+     * @return {int} The angle to the left
+     */
     left() {
         return (this.rotation + 270) % 360;
     }
+
+    /**
+     * Returns the angle 90 degrees to the right of its rotation
+     * @return {int} The angle to the right
+     */
     right() {
         return (this.rotation + 90) % 360;
     }

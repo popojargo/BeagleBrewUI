@@ -1,6 +1,12 @@
 import ObjectScraper from './ObjectScraper.js';
 
 class StatusGrid {
+    /**
+     * Creates a statusGrid with the assetStatus
+     * @param  {Array}  assetGrid   The asset grid that the status grid will be based on
+     * @param  {Object} assetStatus The states of the assets
+     * @return {Array}              The status grid
+     */
     convert(assetGrid, assetStatus) {
         assetStatus = Object.assign({}, assetStatus);
         let statusGrid = [];

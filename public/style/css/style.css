@@ -592,8 +592,6 @@ div.beagleBrewCP div.beagleBrewCP-container div.beagleBrewCP-confirmation {
 }
 
 div.beagleBrewGrid {
-	transform: scale(1);
-	transition: transform 500ms;
 	background: #22313F;
 	height: 100%;
 	display: flex;
@@ -601,30 +599,41 @@ div.beagleBrewGrid {
 	align-items: center;
 }
 
-div.beagleBrewGrid .clickable {
+div.beagleBrewGrid > div.beagleBrewGrid-container {
+	transform: scale(1);
+	transition: transform 500ms;
+	width: 700px;
+}
+
+div.beagleBrewGrid > div.beagleBrewGrid-container .clickable {
 	cursor: pointer;
 }
 
-div.beagleBrewGrid > div.beagleBrewGrid-tanks {
-	position: absolute;
-	width: 950px;
-	height: 700px;
+div.beagleBrewGrid > div.beagleBrewGrid-container div.beagleBrewGrid-assets {
+	width: 100%;
+	position: relative;
 }
 
-div.beagleBrewGrid div.beagleBrewGrid-row {
+div.beagleBrewGrid > div.beagleBrewGrid-container div.beagleBrewGrid-assets > div.beagleBrewGrid-row {
+	width: 100%;
 	display: flex;
 }
 
-div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square {
-	width: 50px;
-	height: 50px;
+div.beagleBrewGrid > div.beagleBrewGrid-container div.beagleBrewGrid-assets > div.beagleBrewGrid-row div.beagleBrewGrid-square {
+	flex-grow: 1;
 }
 
-div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square :not(.clickable) {
+div.beagleBrewGrid > div.beagleBrewGrid-container div.beagleBrewGrid-assets > div.beagleBrewGrid-row div.beagleBrewGrid-square::after {
+	content: "";
+	display: block;
+	padding-bottom: 100%;
+}
+
+div.beagleBrewGrid > div.beagleBrewGrid-container div.beagleBrewGrid-assets > div.beagleBrewGrid-row div.beagleBrewGrid-square :not(.clickable) {
 	pointer-events: none;
 }
 
-div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square .clickable:hover::after {
+div.beagleBrewGrid > div.beagleBrewGrid-container div.beagleBrewGrid-assets > div.beagleBrewGrid-row div.beagleBrewGrid-square .clickable:hover::after {
 	content: '';
 	position: absolute;
 	top: 0;
@@ -635,8 +644,26 @@ div.beagleBrewGrid div.beagleBrewGrid-row div.beagleBrewGrid-square .clickable:h
 	border: 1px dashed #ecf031;
 }
 
-div.openControlPanel div.beagleBrewGrid {
+div.beagleBrewGrid div.openControlPanel div.beagleBrewGrid-container {
 	transform: scale(2);
+}
+
+@media (min-width: 768px) {
+	div.beagleBrewGrid > div.beagleBrewGrid-container {
+		width: 850px;
+	}
+}
+
+@media (min-width: 900px) {
+	div.beagleBrewGrid > div.beagleBrewGrid-container {
+		width: 950px;
+	}
+}
+
+@media (min-width: 1200px) {
+	div.beagleBrewGrid > div.beagleBrewGrid-container {
+		width: 1100px;
+	}
 }
 
 @keyframes rotate {
@@ -653,7 +680,7 @@ div.openControlPanel div.beagleBrewGrid {
 		stroke-opacity: 1;
 	}
 	100% {
-		stroke-opacity: 0.6;
+		stroke-opacity: 0.4;
 	}
 }
 
@@ -768,14 +795,61 @@ div.openControlPanel div.beagleBrewGrid {
 
 .brew-asset.tank {
 	position: absolute;
-	width: auto;
-	height: auto;
+	top: 0;
+}
+
+.brew-asset.tank.clickable {
+	cursor: auto;
+}
+
+.brew-asset.tank.clickable .tank {
+	cursor: pointer;
 }
 
 .brew-asset .tank {
 	border: 5px solid #ecf0f1;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.brew-asset .tank:hover > span.fluid {
+	height: 70%;
+}
+
+.brew-asset .tank:hover > span.fluid::before {
+	opacity: 1;
+}
+
+.brew-asset .tank > span.fluid {
+	width: 100%;
+	height: 0%;
+	transition: height 500ms;
+	color: #ecf0f1;
 	position: absolute;
-	background: transparent;
+	bottom: 0;
+	font-size: 25px;
+}
+
+.brew-asset .tank > span.fluid::before {
+	content: attr(data-temp);
+	transition: opacity 250ms;
+	opacity: 0;
+	position: absolute;
+	padding: 0 10px;
+	right: 100%;
+}
+
+.brew-asset .tank.liquid-1 > span.fluid {
+	background: #19b5fe;
+}
+
+.brew-asset .tank.liquid-2 > span.fluid {
+	background: #f5d76e;
+}
+
+.brew-asset .tank.liquid-3 > span.fluid {
+	background: #d24d57;
 }
 
 .brew-asset.input-tube .arrow {
@@ -813,6 +887,10 @@ div.openControlPanel div.beagleBrewGrid {
 
 .brew-asset.cooler .cooler-icon {
 	animation: 1s ease-in-out 0s infinite alternate backwards paused opacity;
+}
+
+.brew-asset.cooler .cooler-icon polyline {
+	stroke-width: 2px;
 }
 
 .brew-asset.cooler.active .cooler-icon {
