@@ -4,15 +4,16 @@ class StatusGrid {
     convert(assetGrid, assetStatus) {
         assetStatus = Object.assign({}, assetStatus);
         let statusGrid = [];
-        for(const gridRow of assetGrid) {
+        for (const gridRow of assetGrid) {
             let row = [];
-            for(const asset of gridRow) {
-                if(asset === null) {
+            for (const asset of gridRow) {
+                if (asset === null) {
                     row.push(null);
                     continue;
                 }
-                let status = ObjectScraper.scrape(assetStatus, "id", asset.id);
-                if(status) {
+                let result = ObjectScraper.scrape(assetStatus, "id", asset.id);
+                let status = result.data;
+                if (status) {
                     row.push(status);
                     continue;
                 }

@@ -1,51 +1,31 @@
 import {EventEmitter} from "events";
 import dispatcher from '../../dispatcher';
 import * as CST from '../js/constants';
-import Converter from '../js/converter';
 import ObjectScraper from '../js/ObjectScraper'
 
-var brewAssets = require('../../exampleDB/gridLayout.json');
-var exampleStatus = require('../../exampleDB/exampleStatus.json');
+import brewAssets from "../../exampleDB/gridLayout.json";
+
+import exampleStatus from "../../exampleDB/defaultStatus.json";
+import SocketCom from "../js/SocketCom";
 
 class BrewGridStore extends EventEmitter {
     constructor() {
         super();
         this.brewAssets = brewAssets;
-        this.assetMap = this.initAssetMap();
         this.assetStatus = exampleStatus; // Will be updated by the server
 
         this.tankGrid = null;
         this.dataFlow = null;
         this.activeAsset = null;
-    }
 
-    initAssetMap() {
-
-        //Map template
-        let map = {
-            tank: {},
-            valv: {},
-            pump: {}
-        };
-
-        //Map assets per type/id
-        for (let idx in this.brewAssets)
-            if (this.brewAssets.hasOwnProperty(idx)) {
-                let asset = this.brewAssets[idx];
-                if (asset.id) {
-                    if (map[asset.type])
-                        map[asset.type][asset.id] = asset;
-                    else if (map[asset.assetId])
-                        map[asset.assetId][asset.id] = asset;
-                }
-            }
-        return map;
+        //Create socket if not already created
+        if (!this.socket)
+            this.socket = new SocketCom();
     }
 
     // Actions / Emitters
 
     changeData(data) {
-        console.log(data)
         // this.assetGrid[data.y - 1][data.x - 1] = data;
         this.emit("change");
     }
@@ -60,13 +40,24 @@ class BrewGridStore extends EventEmitter {
     }
 
     toggleAsset(id) {
-        let state = ObjectScraper.scrape(this.assetStatus, "id", id);
-        state.status = state.status ? 0 : 1;
-        this.emit("change");
         // check asset status in this.assetStatus
+        let result = ObjectScraper.scrape(this.assetStatus, "id", id);
+        let state = result.data;
         // toggle status
-        // emit to server
+        state.status = state.status ? 0 : 1;
+        
+        // emit to server for supported toggle assets
+        switch (result.parent) {
+            case "Valves":
+                this.socket.updateValve(id, state.status);
+                break;
+            case "Pumps":
+                this.socket.updatePump(id, state.status);
+                break;
+        }
+
         // emit to UI client
+        this.emit("change");
     }
 
     // Getters
@@ -76,7 +67,7 @@ class BrewGridStore extends EventEmitter {
 
     getAssetStatus(id) {
         const clone = Object.assign({}, this.assetStatus);
-        if(typeof id !== "undefined") return ObjectScraper.scrape(clone, "id", id);
+        if (typeof id !== "undefined") return ObjectScraper.scrape(clone, "id", id);
         return clone;
     }
 
@@ -88,53 +79,6 @@ class BrewGridStore extends EventEmitter {
         return this.dataFlow;
     }
 
-    updateById(id, data) {
-        if (this.assetMap[data.type]) {
-            let asset = this.assetMap[data.type][id];
-            if (asset) {
-                asset.prop = Object.assign(asset.prop, data);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    changeStates(states) {
-        for (const typeIdx in states)
-            if (states.hasOwnProperty(typeIdx)) {
-                let group = states[typeIdx];
-                for (let i = 0; i < group.length; i++) {
-                    let elem = group[i];
-                    this.updateById(elem.id, elem);
-                }
-            }
-    }
-
-    forceChangeStates(states) {
-        for (let apiType in states) {
-            if (states.hasOwnProperty(apiType)) {
-                //An array of entities of type "apiType"
-                let apiEntities = states[apiType];
-                let converter = new Converter();
-                let appType = converter.typeToApp(apiType);
-                if (!this.assetMap[apiType])
-                    continue;
-                let appTypeIds = Object.keys(this.assetMap[appType]);
-                let newMapping = {};
-                for (let apiCnt = 0, appCnt = 0; appCnt < appTypeIds.length; apiCnt++, appCnt++) {
-                    let asset = this.assetMap[appType][appTypeIds[appCnt]];
-                    if (apiCnt < apiEntities.length) {
-                        let apiEntity = apiEntities[apiCnt];
-                        asset.id = apiEntity.id;
-                        asset.prop = Object.assign(asset.prop ? asset.prop : {}, apiEntity);
-                    }
-                    newMapping[asset.id] = asset;
-                }
-                this.assetMap[appType] = newMapping;
-            }
-        }
-    }
-
 
     // Handlers
     handleActions(action) {
@@ -144,15 +88,11 @@ class BrewGridStore extends EventEmitter {
             //     this.initializeGrid(action.assetGrid, action.tankGrid);
             //     break;
             case CST.CHANGE_DATA:
-                //TODO: Do we want to update the asset locally? We could assume that it works but this could lead to some weird behaviors if the API call failed.
+                //TODO: Is this still necessary?
                 this.changeData(action.data);
                 break;
             case CST.CHANGE_STATES:
-                // debugger;
-                if (action.data.ForceInit)
-                    this.forceChangeStates(action.data);
-                else
-                    this.changeStates(action.data);
+                this.assetStatus = action.data;
                 this.emit("change");
                 break;
             case CST.TOGGLE_ASSET:
@@ -164,9 +104,6 @@ class BrewGridStore extends EventEmitter {
 }
 
 const brewGridStore = new BrewGridStore();
-dispatcher.register(brewGridStore
-    .handleActions
-    .bind(brewGridStore)
-);
+dispatcher.register(brewGridStore.handleActions.bind(brewGridStore));
 
 export default brewGridStore;
