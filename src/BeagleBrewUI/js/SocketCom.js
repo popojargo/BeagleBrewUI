@@ -3,7 +3,7 @@
  */
 import io from 'socket.io-client';
 
-const config = require('../../internals/api-config');
+import config from "../../internals/api-config";
 
 class SocketCom {
 
@@ -14,6 +14,10 @@ class SocketCom {
         if (!port)
             port = config.port;
 
+        /**
+         *
+         * @type {io}
+         */
         this.socket = new io(ip + ":" + port);
         this.socket.on('connect', this._onConnect.bind(this));
         this.socket.on('disconnect', this._onDisconnect.bind(this));

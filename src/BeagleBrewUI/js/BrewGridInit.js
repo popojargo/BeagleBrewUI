@@ -16,9 +16,9 @@ class BrewGridInit {
     initializeGrid() {
         // TODO: find the highest X and Y of brewAssets to build the assetGrid
 
-        for(var i = 0; i < 14; i++) {
-            var gridRow = [];
-            for(var j = 0; j < 19; j++) {
+        for(let i = 0; i < 14; i++) {
+            let gridRow = [];
+            for(let j = 0; j < 19; j++) {
                 gridRow.push(null);
             }
             this.assetGrid.push(gridRow);
@@ -42,7 +42,8 @@ class BrewGridInit {
         this.cleanupData();
     }
     addTank(tank) {
-        for(var i = 0; i < tank.inputs.length; i++) {
+        let i;
+        for(i = 0; i < tank.inputs.length; i++) {
             this.placeInputOutput(tank.inputs[i], tank.x, tank.y);
         }
         for(i = 0; i < tank.outputs.length; i++) {
