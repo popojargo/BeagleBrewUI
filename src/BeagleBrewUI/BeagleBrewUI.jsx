@@ -9,7 +9,6 @@ import {
 // Brew Grid logic
 import BrewGridInit from './js/BrewGridInit.js';
 import FluidSimulation from './js/FluidSimulation.js';
-import SocketCom from './js/SocketCom.js';
 import StatusGrid from './js/StatusGrid.js';
 
 // Flux
