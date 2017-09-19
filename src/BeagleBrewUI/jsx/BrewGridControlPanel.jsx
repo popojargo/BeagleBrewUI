@@ -26,8 +26,9 @@ class BrewGridControlPanel extends Component {
     }
     updateData() {
         this.setState({
-            asset: this.getAsset()
+            asset: BrewGridStore.getDataFlow()
         })
+        //TODO: use this.state.asset rather than props
     }
     back() {
         BrewGridActions.stopDataFlow();

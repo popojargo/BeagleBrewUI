@@ -15,7 +15,6 @@ class BrewGridStore extends EventEmitter {
         this.assetStatus = exampleStatus; // Will be updated by the server
 
         this.tankGrid = null;
-        this.dataFlow = null;
         this.activeAsset = null;
 
         //Create socket if not already created
@@ -30,13 +29,24 @@ class BrewGridStore extends EventEmitter {
         this.emit("change");
     }
 
-    startDataFlow(asset) {
-        if (this.dataFlow === null) {
-            // asset.startDataFlow();
-            this.activeAsset = asset;
-            this.flowData(asset.state.data);
-            this.emit("Toggle Control Panel");
+    flowData() {
+        if (this.activeAsset !== null) {
+            this.emit("Flowing Data");
         }
+    }
+
+    startDataFlow(id) {
+        if (this.activeAsset === null) {
+            this.activeAsset = ObjectScraper.scrape(this.assetStatus, "id", id);
+
+            this.emit("Toggle Control Panel");
+            this.flowData();
+        }
+    }
+
+    stopDataFlow() {
+        this.activeAsset = null;
+        this.emit("Toggle Control Panel");
     }
 
     toggleAsset(id) {
@@ -45,7 +55,7 @@ class BrewGridStore extends EventEmitter {
         let state = result.data;
         // toggle status
         state.status = state.status ? 0 : 1;
-        
+
         // emit to server for supported toggle assets
         switch (result.parent) {
             case "Valves":
@@ -55,7 +65,7 @@ class BrewGridStore extends EventEmitter {
                 this.socket.updatePump(id, state.status);
                 break;
         }
-
+        this.flowData();
         // emit to UI client
         this.emit("change");
     }
@@ -71,14 +81,9 @@ class BrewGridStore extends EventEmitter {
         return clone;
     }
 
-    // getAssetGrid() {
-    //     return this.assetGrid;
-    // }
-
     getDataFlow() {
-        return this.dataFlow;
+        return this.activeAsset;
     }
-
 
     // Handlers
     handleActions(action) {
@@ -87,6 +92,9 @@ class BrewGridStore extends EventEmitter {
             // case CST.INIT_GRID:
             //     this.initializeGrid(action.assetGrid, action.tankGrid);
             //     break;
+            case CST.REQUEST_DATAFLOW:
+                this.startDataFlow(action.id);
+                break;
             case CST.CHANGE_DATA:
                 //TODO: Is this still necessary?
                 this.changeData(action.data);
