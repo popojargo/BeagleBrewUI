@@ -1,6 +1,7 @@
 //Actions export constant holder
 export const INIT_GRID = "INIT_GRID";
 export const CHANGE_DATA = "CHANGE_DATA";
+export const REQUEST_DATAFLOW = "REQUEST_DATAFLOW";
 export const START_DATAFLOW = "START_DATAFLOW";
 export const STOP_DATAFLOW = "STOP_DATAFLOW";
 export const FLOW_DATA = "FLOW_DATA";

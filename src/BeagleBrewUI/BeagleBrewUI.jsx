@@ -75,15 +75,23 @@ class BrewGrid extends Component {
     constructor(props) {
         super(props);
         this.toggleCP = this.toggleCP.bind(this);
+        this.flowData = this.flowData.bind(this);
         this.state = {
             showCP: false
         };
     }
 
     toggleCP() {
-        var asset = BrewGridStore.getDataFlow();
         this.setState((prevState) => ({
             showCP: !prevState.showCP
+        }));
+        this.flowData();
+    }
+
+    flowData() {
+        var flowStatus = BrewGridStore.getDataFlow();
+        this.setState((prevState) => ({
+            flowStatus: flowStatus
         }));
     }
 
@@ -121,7 +129,7 @@ class BrewGrid extends Component {
                     </div>
                 </div>
                 <div className="beagleBrewCP">
-                    <BrewGridControlPanel/>
+                    <BrewGridControlPanel />
                 </div>
             </div>
         );

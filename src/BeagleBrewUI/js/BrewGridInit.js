@@ -13,7 +13,6 @@ class BrewGridInit {
         return this.assetGrid.slice(0);
     }
     getTanks() {
-        console.log(this.tanks)
         return this.tanks.slice(0);
     }
 

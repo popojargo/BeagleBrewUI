@@ -16,10 +16,10 @@ export function changeData(data) {
     });
 }
 
-export function requestDataFlow(asset) {
+export function requestDataFlow(id) {
     dispatcher.dispatch({
-        type: CST.START_DATAFLOW,
-        asset
+        type: CST.REQUEST_DATAFLOW,
+        id
     });
 }
 
