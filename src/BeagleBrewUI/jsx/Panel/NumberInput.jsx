@@ -13,7 +13,7 @@ class NumberInput extends BaseInput {
             <div>
                 <label htmlFor="">{this.props.layout.label}</label>
                 <span className="content-data" data-unit={unit}>
-                    <input id="" type="number" value={this.state.val}
+                    <input id="" type="number" value={this.props.val}
                            onChange={this.onChange.bind(this)} disabled={!this.props.layout.editable}/>
                 </span>
             </div>

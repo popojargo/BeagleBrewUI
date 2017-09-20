@@ -49,9 +49,13 @@ class BrewGridStore extends EventEmitter {
         this.emit("Toggle Control Panel");
     }
 
-    changeTemp(id) {
+    changeTemp(id, key, event) {
         let result = ObjectScraper.scrape(this.assetStatus, "id", id);
         let data = result.data;
+        //emit to client
+        data[key] = event.target.value;
+
+        //emit to server
         switch (result.parent) {
             case "Tanks":
                 this.socket.updateTank(id, data.setTemp, data.controllerStatus);
@@ -60,14 +64,16 @@ class BrewGridStore extends EventEmitter {
         this.emit("change");
     }
 
-    toggleAsset(id) {
+    toggleAsset(id, key, event) {
         // check asset status in this.assetStatus
-
         let result = ObjectScraper.scrape(this.assetStatus, "id", id);
         let state = result.data;
         // toggle status
-        state.status = state.status ? 0 : 1;
-
+        if (!key || !event)
+            state.status = state.status ? 0 : 1;
+        else if (key === "status" && event)
+            state.status = parseInt(event.target.value);
+        console.log(state.status);
         // emit to server for supported toggle assets
         switch (result.parent) {
             case "Valves":
@@ -99,7 +105,6 @@ class BrewGridStore extends EventEmitter {
 
     // Handlers
     handleActions(action) {
-        // debugger;
         switch (action.type) {
             // case CST.INIT_GRID:
             //     this.initializeGrid(action.assetGrid, action.tankGrid);
@@ -119,10 +124,10 @@ class BrewGridStore extends EventEmitter {
                 this.emit("change");
                 break;
             case CST.TOGGLE_ASSET:
-                this.toggleAsset(action.id);
+                this.toggleAsset(action.id, action.key, action.event);
                 break;
             case CST.CHANGE_TEMP:
-                this.changeTemp(action.id);
+                this.changeTemp(action.id, action.key, action.event);
                 break;
             default:
         }

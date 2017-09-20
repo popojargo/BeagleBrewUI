@@ -80,12 +80,12 @@ class LayoutParser {
     getInput(layout, value, id, key) {
         switch (layout.type.toLowerCase()) {
             case "number":
-                return <NumberInput val={value} id={id} key={key} layout={layout}/>;
+                return <NumberInput val={value} id={id} key={key} rKey={key} layout={layout}/>;
             case "enum":
-                return <EnumInput val={value} id={id} key={key} layout={layout}/>;
+                return <EnumInput val={value} id={id} key={key} rKey={key} layout={layout}/>;
             case "string":
             default:
-                return <StringInput val={value} id={id} key={key} layout={layout}/>;
+                return <StringInput val={value} id={id} key={key} rKey={key} layout={layout}/>;
         }
     }
 }

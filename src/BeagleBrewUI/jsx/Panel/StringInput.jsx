@@ -14,7 +14,7 @@ class StringInput extends BaseInput {
             <div>
                 <label>{this.props.layout.label}</label>
                 <span className="content-data" data-unit={unit}>
-                <input type="text" value={this.state.val} onChange={this.onChange.bind(this)}
+                <input type="text" value={this.props.val} onChange={this.onChange.bind(this)}
                        disabled={!this.props.layout.editable}/>
             </span>
             </div>

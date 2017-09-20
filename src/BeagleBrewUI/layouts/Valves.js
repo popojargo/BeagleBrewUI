@@ -17,7 +17,7 @@ export default {
                 "Ouvert"
             ],
             editable: true,
-            onChange: BrewGridStore.toggleAsset
+            onChange: BrewGridStore.toggleAsset.bind(BrewGridStore)
         }
     }
 };

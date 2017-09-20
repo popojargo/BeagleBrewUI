@@ -14,7 +14,7 @@ class EnumInput extends BaseInput {
         return (
             <div>
                 <label>{this.props.layout.label}</label>
-                <select onChange={this.onChange.bind(this)} value={this.state.val}
+                <select onChange={this.onChange.bind(this)} value={this.props.val}
                         disabled={!this.props.layout.editable}>
                     {options}
                 </select>

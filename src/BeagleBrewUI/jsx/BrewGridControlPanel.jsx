@@ -58,7 +58,8 @@ class BrewGridControlPanel extends Component {
         let layout = LayoutManager.getLayout(type);
         const dataKeys = Object.keys(layout.cols);
         const cpContent = dataKeys.map((data, index) =>
-            <Content type={type} val={assetData[data]} layout={layout.cols[data]} id={assetData.id} key={index}/>
+            <Content type={type} val={assetData[data]} layout={layout.cols[data]} id={assetData.id} key={data}
+                     rKey={data}/>
         );
         return (
             <div className="beagleBrewCP-container">
@@ -85,7 +86,7 @@ class Content extends Component {
     }
 
     render() {
-        let element = LayoutManager.getInput(this.props.layout, this.props.val, this.props.id, this.key);
+        let element = LayoutManager.getInput(this.props.layout, this.props.val, this.props.id, this.props.rKey);
         return (
             <div className="beagleBrewCP-content">
                 {element}

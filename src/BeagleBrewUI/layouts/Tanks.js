@@ -29,14 +29,14 @@ export default {
                 "Asservi"
             ],
             editable: true,
-            onChange: BrewGridStore.changeTemp
+            onChange: BrewGridStore.changeTemp.bind(BrewGridStore)
         },
         setTemp: {
             label: "Set temp: ",
             type: "number",
             unitType: "temperature",
             editable: true,
-            onChange: BrewGridStore.changeTemp
+            onChange: BrewGridStore.changeTemp.bind(BrewGridStore)
         },
         currentTemp: {
             label: "Current temp: ",
