@@ -214,7 +214,7 @@ class BrewGridInit {
                     if(posTubing) {
                         if(gridData.posTubing) {
                             // curved
-                            asset.assetId = "t2"
+                            asset.assetId = "t2";
                             switch(gridData.rotation + modRotation) {
                                 case 270:
                                 asset.rotation = gridData.rotation * modRotation ? 180 : 0;

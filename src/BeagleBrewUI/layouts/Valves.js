@@ -1,8 +1,6 @@
 export default {
     cols: {
-        id: {
-            editable: false
-        },
+        id: {},
         status: {
             type: "enum",
             enumKeys: [
@@ -14,7 +12,8 @@ export default {
                 "Erreur",
                 "Fermé",
                 "Ouvert"
-            ]
+            ],
+            editable: true
         }
     }
 };

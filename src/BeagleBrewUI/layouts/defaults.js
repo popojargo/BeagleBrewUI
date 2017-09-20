@@ -1,10 +1,10 @@
 export default {
     "cols": {
         "type": "string",
-        "editable": true,
+        "editable": false,
         "unitType": "",
         "enumKeys": [],
-        "enumVals": "_enumKeys",
+        "enumVals": "_=enumKeys",
         "label": "_name"
     }
 };

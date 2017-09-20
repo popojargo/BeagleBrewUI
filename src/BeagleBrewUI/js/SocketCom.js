@@ -22,7 +22,7 @@ class SocketCom {
         this.socket.on('connect', this._onConnect.bind(this));
         this.socket.on('disconnect', this._onDisconnect.bind(this));
         this.socket.on('state change', this._onStateChange.bind(this));
-
+        this.connected = false;
         this.stateChangeSubs = {};
     }
 
@@ -32,6 +32,7 @@ class SocketCom {
      */
     _onConnect() {
         console.log('[Socket] Connected');
+        this.connected = true;
     }
 
     /**
@@ -40,7 +41,15 @@ class SocketCom {
      */
     _onDisconnect() {
         console.log('[Socket] Disconnected');
+        this.connected = false;
         //TODO : Reset admin control if it had
+    }
+
+    /**
+     * @returns {boolean} True if connected. Otherwise false.
+     */
+    isConnected() {
+        return this.connected;
     }
 
     /**

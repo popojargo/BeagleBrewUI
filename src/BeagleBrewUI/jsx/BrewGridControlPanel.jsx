@@ -6,6 +6,7 @@ import variables from "../../exampleDB/units.json";
 class BrewGridControlPanel extends Component {
     constructor(props) {
         super(props);
+        //TODO : {result: {}, parent : ""}
         this.back = this.back.bind(this);
         this.confirm = this.confirm.bind(this);
         this.confirm = this.confirm.bind(this);
@@ -45,6 +46,7 @@ class BrewGridControlPanel extends Component {
         }
         var assetData = asset.prop;
         const dataKeys = Object.keys(assetData);
+        debugger;
         const cpContent = dataKeys.map((data, index) =>
             <Content dataName={data} data={assetData[data]} key={index} />
         );

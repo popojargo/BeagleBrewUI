@@ -1,10 +1,6 @@
-
-
 export default {
     cols: {
-        id: {
-            editable: false
-        },
+        id: {},
         sensorStatus: {
             type: "enum",
             enumKeys: [
@@ -16,8 +12,7 @@ export default {
                 "Connexion fautive",
                 "Connexion correct",
                 "Valeurs anormales"
-            ],
-            editable: false
+            ]
         },
         controllerStatus: {
             type: "enum",
@@ -28,12 +23,12 @@ export default {
             enumVals: [
                 "Non-asservi",
                 "Asservi"
-            ],
-            editable: false
+            ]
         },
         setTemp: {
             type: "number",
-            unitType: "temperature"
+            unitType: "temperature",
+            editable: true
         },
         currentTemp: {
             type: "number",
