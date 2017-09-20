@@ -115,7 +115,7 @@ class BrewAssetClickable extends BrewAsset {
     }
 
     clickHandler() {
-        BrewGridActions.requestDataFlow(this);
+        BrewGridActions.requestDataFlow(this.props.data.id);
     }
 
     getClass(assetClass, hasRotation) {

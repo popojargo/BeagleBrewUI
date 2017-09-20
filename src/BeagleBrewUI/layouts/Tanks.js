@@ -1,7 +1,10 @@
+import * as BrewGridStore from "../actions/BrewGridActions";
+
 export default {
     cols: {
-        id: {},
+        id: {label: "Id: "},
         sensorStatus: {
+            label: "Sensor : ",
             type: "enum",
             enumKeys: [
                 0,
@@ -15,6 +18,7 @@ export default {
             ]
         },
         controllerStatus: {
+            label: "Controller: ",
             type: "enum",
             enumKeys: [
                 0,
@@ -23,16 +27,21 @@ export default {
             enumVals: [
                 "Non-asservi",
                 "Asservi"
-            ]
+            ],
+            editable: true,
+            onChange: BrewGridStore.changeTemp
         },
         setTemp: {
+            label: "Set temp: ",
             type: "number",
             unitType: "temperature",
-            editable: true
+            editable: true,
+            onChange: BrewGridStore.changeTemp
         },
         currentTemp: {
+            label: "Current temp: ",
             type: "number",
             unitType: "temperature"
-        }
+        },
     }
 };

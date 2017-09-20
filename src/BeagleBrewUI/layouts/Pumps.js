@@ -1,8 +1,8 @@
+import * as BrewGridStore from "../actions/BrewGridActions";
+
 export default {
     cols: {
-        id: {
-
-        },
+        id: {label: "Id: "},
         status: {
             type: "enum",
             enumKeys: [
@@ -15,7 +15,9 @@ export default {
                 "Fermé",
                 "Ouvert"
             ],
-            editable: true
+            editable: true,
+            onChange: BrewGridStore.toggleAsset,
+            label: "Status: "
         }
     }
 };

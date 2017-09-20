@@ -1,26 +1,23 @@
-import defaults from '../../layouts/defaults.js';
-import LayoutParser from './LayoutManager.js';
-import * as React from "react";
+import React, {Component} from 'react';
+import BrewGridStore from "../../stores/BrewGridStore";
 
-let colsDef = defaults.cols;
 
 class BaseInput extends Component {
 
     constructor(props) {
         super(props);
-        //Load the defaults for a column
-        LayoutParser.parseColLayout(this, colsDef, props.name)
-    }
-
-    getDisableProp() {
-        return this.props.editable ? '' : 'disabled';
+        this.state = {
+            val: this.props.val
+        };
     }
 
     onChange(event) {
-        if (this.props.onChange) {
-            this.props.onChange(this.props.id, event);
-        } else
-            this.props.value = event.target.value;
+        if (this.props.layout.onChange && typeof this.props.layout.onChange === "function") {
+            this.props.layout.onChange.call(BrewGridStore, this.props.id, event);
+        }
+        let currentState = this.state;
+        currentState.val = event.target.value;
+        this.setState(currentState);
     }
 
     //TODO : Add the ids for htmlFor and ids

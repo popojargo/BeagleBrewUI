@@ -1,8 +1,25 @@
 import Tanks from '../../layouts/Tanks.js';
 import Pumps from '../../layouts/Pumps.js';
 import Valves from '../../layouts/Valves.js';
+import defaults from '../../layouts/defaults.js';
+import * as React from "react";
+import NumberInput from "./NumberInput";
+import EnumInput from "./EnumInput";
+import StringInput from "./StringInput";
 
 class LayoutParser {
+    constructor() {
+        //Load the defaults inside the layouts.
+        let defCols = defaults.cols;
+        let layouts = [Tanks, Pumps, Valves];
+        for (let lay of layouts) {
+            let layCols = lay.cols;
+            for (let c in layCols)
+                if (layCols.hasOwnProperty(c)) {
+                    this.parseColLayout(layCols[c], defCols, c);
+                }
+        }
+    }
 
     /**
      * Get a layout according to the type of layout requested.
@@ -13,16 +30,12 @@ class LayoutParser {
         switch (type) {
             case "Tanks":
                 return Tanks;
-                break;
             case "Pumps":
                 return Pumps;
-                break;
             case "Valves":
                 return Valves;
-                break;
             default:
                 return {};
-                break;
         }
     }
 
@@ -41,26 +54,38 @@ class LayoutParser {
         //Parse normal default values.
         for (let k in layout) {
             if (layout.hasOwnProperty(k)) {
-                if (obj.props[k])
+                if (obj[k])
                     continue;
                 let v = layout[k];
-                if (v.startsWith('_='))
+                if ((v + '').startsWith('_='))
                     parseCodes[k] = v.substr(2);
-                else if (v.startsWith('_'))
-                    obj.props[k] = specialVal[v];
+                else if ((v + '').startsWith('_'))
+                    obj[k] = specialVal[v];
                 else
-                    obj.props[k] = v;
+                    obj[k] = v;
             }
         }
 
         //Parse special codes
         for (let k in parseCodes) {
             if (parseCodes.hasOwnProperty(k)) {
-                if (obj.props[k])
+                if (obj[k])
                     continue;
                 let v = parseCodes[k];
-                obj.props[k] = obj.props[v];
+                obj[k] = obj[v];
             }
+        }
+    }
+
+    getInput(layout, value, id, key) {
+        switch (layout.type.toLowerCase()) {
+            case "number":
+                return <NumberInput val={value} id={id} key={key} layout={layout}/>;
+            case "enum":
+                return <EnumInput val={value} id={id} key={key} layout={layout}/>;
+            case "string":
+            default:
+                return <StringInput val={value} id={id} key={key} layout={layout}/>;
         }
     }
 }

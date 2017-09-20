@@ -8,13 +8,14 @@ class EnumInput extends BaseInput {
 
     render() {
         let options = [];
-        for (let i = 0; i < this.props.enumKeys.length && i < this.props.enumVals; i++) {
-            options.push(<option value={this.props.enumKeys[i]}>{this.props.enumVals[i]}</option>)
+        for (let i = 0; i < this.props.layout.enumKeys.length && i < this.props.layout.enumVals.length; i++) {
+            options.push(<option value={this.props.layout.enumKeys[i]} key={i}>{this.props.layout.enumVals[i]}</option>)
         }
         return (
             <div>
-                <label>{this.props.label}</label>
-                <select {this.getDisableProp()} onChange={this.props.onChange}>
+                <label>{this.props.layout.label}</label>
+                <select onChange={this.onChange.bind(this)} value={this.state.val}
+                        disabled={!this.props.layout.editable}>
                     {options}
                 </select>
             </div>

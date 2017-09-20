@@ -49,8 +49,20 @@ class BrewGridStore extends EventEmitter {
         this.emit("Toggle Control Panel");
     }
 
+    changeTemp(id) {
+        let result = ObjectScraper.scrape(this.assetStatus, "id", id);
+        let data = result.data;
+        switch (result.parent) {
+            case "Tanks":
+                this.socket.updateTank(id, data.setTemp, data.controllerStatus);
+                break;
+        }
+        this.emit("change");
+    }
+
     toggleAsset(id) {
         // check asset status in this.assetStatus
+
         let result = ObjectScraper.scrape(this.assetStatus, "id", id);
         let state = result.data;
         // toggle status
@@ -95,6 +107,9 @@ class BrewGridStore extends EventEmitter {
             case CST.REQUEST_DATAFLOW:
                 this.startDataFlow(action.id);
                 break;
+            case CST.STOP_DATAFLOW:
+                this.stopDataFlow();
+                break;
             case CST.CHANGE_DATA:
                 //TODO: Is this still necessary?
                 this.changeData(action.data);
@@ -105,6 +120,9 @@ class BrewGridStore extends EventEmitter {
                 break;
             case CST.TOGGLE_ASSET:
                 this.toggleAsset(action.id);
+                break;
+            case CST.CHANGE_TEMP:
+                this.changeTemp(action.id);
                 break;
             default:
         }

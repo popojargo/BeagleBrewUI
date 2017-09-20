@@ -9,13 +9,14 @@ class StringInput extends BaseInput {
     }
 
     render() {
-        let unit = units[this.props.unitType];
+        let unit = units[this.props.layout.unitType];
         return (
             <div>
-                <label>{this.props.label}</label>
+                <label>{this.props.layout.label}</label>
                 <span className="content-data" data-unit={unit}>
-                <input type="text" value={this.props.value} {this.getDisableProp()}/>
-                </span>
+                <input type="text" value={this.state.val} onChange={this.onChange.bind(this)}
+                       disabled={!this.props.layout.editable}/>
+            </span>
             </div>
         );
     }

@@ -123,9 +123,10 @@ class SocketCom {
      * @param id The id of the tank
      * @param temp The temperature to set.
      */
-    updateTank(id, temp) {
+    updateTank(id, temp, controllerStatus) {
         this.socket.emit('change tank temp', {
-            id: id, temp: temp
+            id: id, setTemp: temp,
+            controllerStatus: controllerStatus
         });
     }
 }

@@ -49,3 +49,10 @@ export function toggleAsset(id) {
         id
     })
 }
+
+export function changeTemp(id) {
+    dispatcher.dispatch({
+        type: CST.CHANGE_TEMP,
+        id
+    });
+}

@@ -8,13 +8,13 @@ class NumberInput extends BaseInput {
     }
 
     render() {
-        let unit = units[this.props.unitType];
+        let unit = units[this.props.layout.unitType];
         return (
             <div>
-                <label htmlFor="">{this.label}</label>
+                <label htmlFor="">{this.props.layout.label}</label>
                 <span className="content-data" data-unit={unit}>
-                    <input id="" type="number" value={this.props.value}
-                           onChange={this.props.onChange} {this.getDisableProp()}/>
+                    <input id="" type="number" value={this.state.val}
+                           onChange={this.onChange.bind(this)} disabled={!this.props.layout.editable}/>
                 </span>
             </div>
         );
